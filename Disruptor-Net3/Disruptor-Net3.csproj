@@ -89,7 +89,6 @@
     <Compile Include="SequenceGroup.cs" />
     <Compile Include="Sequencers\MultiProducerSequencer.cs" />
     <Compile Include="Sequencers\SingleProducerSequencer.cs" />
-    <Compile Include="Util\PaddedLong.cs" />
     <Compile Include="Util\Util.cs" />
     <Compile Include="WaitStrategies\BlockingWaitStrategy.cs" />
     <Compile Include="WaitStrategies\PhasedBackoffWaitStrategy.cs" />
