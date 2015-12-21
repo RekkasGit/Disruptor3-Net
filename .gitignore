@@ -1,0 +1,9 @@
+/*.suo
+/Disruptor-Net3/bin
+/*.vsp
+/*.psess
+/Disruptor-Net3.Console/bin
+/Disruptor-Net3.Console/obj
+/Disruptor-Net3.Tests/obj
+/Disruptor-Net3.Tests/bin
+/Disruptor-Net3/obj
