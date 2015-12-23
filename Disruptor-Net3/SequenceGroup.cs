@@ -18,7 +18,7 @@ namespace Disruptor_Net3
  */
     public class SequenceGroup:Sequence
     {
-        private Sequence[] sequences = new Sequence[0];
+        private volatile Sequence[] sequences = new Sequence[0];
 
         /**
          * Default Constructor

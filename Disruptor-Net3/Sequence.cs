@@ -68,7 +68,7 @@ namespace Disruptor_Net3
          *
          * @return The current value of the sequence.
          */
-
+        
         public virtual long get()
         {
             return Volatile.Read(ref  paddedValue.value);
@@ -82,11 +82,14 @@ namespace Disruptor_Net3
          * @param value The new value for the sequence.
          */
         //http://psy-lob-saw.blogspot.com/2012/12/atomiclazyset-is-performance-win-for.html
+        /*
+         * Martin Thompson15 August 2014 at 18:02
+        My understanding of the .Net Memory Model is that it is stronger than the Java Memory Model, particularly for field access - writes to a field have StoreStore ordering.
+        http://msdn.microsoft.com/en-us/magazine/jj863136.aspx //memory modle 1
+        https://msdn.microsoft.com/en-us/magazine/jj883956.aspx // memory modle 2
+        */
         public virtual void set(long value)
         {
-            //need to determine if a simple set is all that is needed (quite possibly need a memory barrier)
-            //or does the interlocked before this call provide enough. Testing on a single socket seems fine
-            //need to test on multi socket. 
             paddedValue.value = value;
             //Interlocked.Exchange(ref paddedValue.value,value);
         }
