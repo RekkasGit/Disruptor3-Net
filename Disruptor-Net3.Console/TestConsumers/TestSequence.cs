@@ -7,16 +7,20 @@ using System.Threading.Tasks;
 
 namespace Disruptor_Net3.Console.TestConsumers
 {
-    public class TestSequence : Disruptor_Net3.Interfaces.IEventHandler<TestEvent>
+    public class TestMultiThreadedSequence : Disruptor_Net3.Interfaces.IEventHandler<TestEvent>
     {
         Int64 value = 0;
         System.Diagnostics.Stopwatch stopwatch = null;
-        Int64 counter = 0;
-        public Int64 totalExpected = 0;
+        
+        private Int64 _totalExpected = 0;
+        public Int64 totalExpected{
+            get{  return _totalExpected; }
+            set { _totalExpected = value - 1; } 
+        }
         PaddedLong previousSequence = new PaddedLong();
         string _name;
         ManualResetEventSlim _resetEvent;
-        public TestSequence(string name, ManualResetEventSlim resetEvent)
+        public TestMultiThreadedSequence(string name, ManualResetEventSlim resetEvent, Int32 numberOfThreads)
         {
             previousSequence.value = -1;
             _name = name;
@@ -24,7 +28,7 @@ namespace Disruptor_Net3.Console.TestConsumers
         }
         public void onEvent(TestEvent eventToUse, long sequence, bool endOfBatch)
         {
-            if((sequence-1)==previousSequence.value)
+            if(sequence==previousSequence.value+1)
             {
                 previousSequence.value = sequence;
             }
@@ -32,16 +36,15 @@ namespace Disruptor_Net3.Console.TestConsumers
             {
                 throw new ApplicationException("Sequence is messed up!");
             }
-            counter++;
             if (stopwatch == null)
             {
                 stopwatch = new System.Diagnostics.Stopwatch();
                 stopwatch.Start();
             }
-            if (counter == totalExpected)
+            if (sequence == _totalExpected)
             {
                 stopwatch.Stop();
-                System.Console.WriteLine("[" + _name + "] Consumer is done processing Events! Total Time in milliseconds:" + stopwatch.Elapsed.TotalMilliseconds + " " + String.Format("{0:###,###,###,###}op/sec", (totalExpected / stopwatch.Elapsed.TotalSeconds)));
+                System.Console.WriteLine("[" + _name + "] Consumer is done processing Events! Total Time in milliseconds:" + stopwatch.Elapsed.TotalMilliseconds + " " + String.Format("{0:###,###,###,###}op/sec", (_totalExpected / stopwatch.Elapsed.TotalSeconds)));
                 _resetEvent.Set();
 
             }

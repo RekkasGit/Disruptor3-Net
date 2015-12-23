@@ -11,7 +11,7 @@ using System.Diagnostics;
 namespace Disruptor_Net3.Tests
 {
     [TestClass]
-    public class DiamondPath1P3C : AbstractFizzBuzz1P3CPerfTest
+    public class FizzBuzz1P3C : AbstractFizzBuzz1P3CPerfTest
     {
         private RingBuffer<FizzBuzzEvent> _ringBuffer;
         private FizzBuzzEventHandler _fizzEventHandler;
@@ -19,7 +19,7 @@ namespace Disruptor_Net3.Tests
         private FizzBuzzEventHandler _fizzBuzzEventHandler;
         private ManualResetEvent _mru;
         private Disruptor<FizzBuzzEvent> _disruptor;
-        public DiamondPath1P3C():base(1000 * Million)
+        public FizzBuzz1P3C():base(1000 * Million)
         {
            Trace.Listeners.Add(new TextWriterTraceListener(Console.Out));
         }

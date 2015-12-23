@@ -11,7 +11,7 @@ namespace Disruptor_Net3.Console
     {
         Int64 value = 0;
         System.Diagnostics.Stopwatch stopwatch = null;
-        Int64 counter = 0;
+        PaddedLong counter = new PaddedLong();
         public Int64 totalExpected = 0;
         string _name;
         ManualResetEventSlim _resetEvent = null;
@@ -23,13 +23,13 @@ namespace Disruptor_Net3.Console
 
         public void onEvent(TestEvent eventToUse, long sequence, bool endOfBatch)
         {
-            counter++;
+            counter.value++;
             if(stopwatch==null)
             {
                 stopwatch = new System.Diagnostics.Stopwatch();
                 stopwatch.Start();
             }
-            if (counter == totalExpected)
+            if (counter.value == totalExpected)
             {
                 stopwatch.Stop();
                

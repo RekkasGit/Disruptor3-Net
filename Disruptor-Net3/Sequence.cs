@@ -84,6 +84,9 @@ namespace Disruptor_Net3
         //http://psy-lob-saw.blogspot.com/2012/12/atomiclazyset-is-performance-win-for.html
         public virtual void set(long value)
         {
+            //need to determine if a simple set is all that is needed (quite possibly need a memory barrier)
+            //or does the interlocked before this call provide enough. Testing on a single socket seems fine
+            //need to test on multi socket. 
             paddedValue.value = value;
             //Interlocked.Exchange(ref paddedValue.value,value);
         }

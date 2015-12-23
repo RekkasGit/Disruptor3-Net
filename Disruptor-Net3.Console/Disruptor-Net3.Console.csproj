@@ -42,12 +42,15 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Events\Test3P1CEvent.cs" />
+    <Compile Include="Factories\Test3P1CEventFactory.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="TestConsumers\Test3P1CConsumer.cs" />
     <Compile Include="TestConsumers\TestConsumer.cs" />
     <Compile Include="TestConsumers\TestSequence.cs" />
     <Compile Include="TestEvent.cs" />
-    <Compile Include="TestEventFactory.cs" />
+    <Compile Include="Factories\TestEventFactory.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

@@ -5,6 +5,8 @@ using System.Text;
 using System.Threading.Tasks;
 using Disruptor_Net3;
 using System.Threading;
+using Disruptor_Net3.Console.Events;
+using Disruptor_Net3.Console.Factories;
 
 namespace Disruptor_Net3.Console
 {
@@ -15,38 +17,74 @@ namespace Disruptor_Net3.Console
             System.Console.WriteLine("Press enter to start test");
             System.Console.ReadLine();
             
-            TestSingleThreading();
-            
-            FizzBuzz1P3C();
-            
             TestMultiIncrementSequence();
-            
             TestMultiThreading();
-            
+            TestMulti3P1C();
+            TestSingleThreading();
+            FizzBuzz1P3C();
             System.Console.ReadLine();
         }
         public static void FizzBuzz1P3C()
         {
             System.Console.WriteLine("Starting FizzBuzz1P3C Test");
           
-            Disruptor_Net3.Tests.DiamondPath1P3C test = new Tests.DiamondPath1P3C();
+            Disruptor_Net3.Tests.FizzBuzz1P3C test = new Tests.FizzBuzz1P3C();
             System.Diagnostics.Stopwatch stopwatch = new System.Diagnostics.Stopwatch();
             stopwatch.Start();
         
             test.FizzBuzz1P3CDisruptorPerfTest();
             stopwatch.Stop();
-            System.Console.WriteLine("Total time for DiamondPath1P3C:" + stopwatch.Elapsed.TotalMilliseconds);
+            System.Console.WriteLine("Total time for FizzBuzz1P3C:" + stopwatch.Elapsed.TotalMilliseconds);
+        }
+        public static void TestMulti3P1C()
+        {
+            System.Console.WriteLine("Starting TestMulti3P1C Test");
+            Int32 numberOfThreads = 3;
+            Int32 totalNumber = 100000000;
+            ManualResetEventSlim resetEvent = new ManualResetEventSlim(false);
+            dsl.Disruptor<Test3P1CEvent> disruptor = new dsl.Disruptor<Test3P1CEvent>(new Test3P1CEventFactory(), 1024, dsl.ProducerType.MULTI, new Disruptor_Net3.WaitStrategies.BlockingWaitStrategy());
+            TestXP1CConsumer handler = new TestXP1CConsumer("TestMulti3P1C", resetEvent,numberOfThreads);
+            handler.totalExpected = totalNumber;
+            disruptor.handleEventsWith(handler);
+            disruptor.start();
+
+            RingBuffer<Test3P1CEvent> ringBuffer = disruptor.getRingBuffer();
+            for (Int32 i = 0; i < numberOfThreads; i++)
+            {
+                Int32 tempthreadId = i;
+                Task.Factory.StartNew(() =>
+                {
+                    Int32 currentThreadId = tempthreadId;
+                    PaddedLong currentCounter = new PaddedLong();
+                    currentCounter.value= 1;
+
+                    while (currentCounter.value <= totalNumber)
+                    {
+                        long sequence = ringBuffer.next();
+                        Test3P1CEvent tEvent = ringBuffer.get(sequence);
+                        tEvent.currentCounter = currentCounter.value;
+                        tEvent.threadID = currentThreadId;
+                        ringBuffer.publish(sequence);
+                        currentCounter.value++;
+                    }
+                });
+
+            }
+            resetEvent.Wait();
+            disruptor.shutdown();
+
+
         }
         public static void TestMultiIncrementSequence()
         {
             System.Console.WriteLine("Starting TestMultiIncrementSequence Test");
             Int32 numberOfThreads = 3;
-            Int32 totalNumber = 100000000;
+            Int32 totalNumber = 300000000;
             Int32 numberPerThread = totalNumber / numberOfThreads;
             ManualResetEventSlim resetEvent = new ManualResetEventSlim(false);
             dsl.Disruptor<TestEvent> disruptor = new dsl.Disruptor<TestEvent>(new TestEventFactory(), 1024, dsl.ProducerType.MULTI, new Disruptor_Net3.WaitStrategies.BlockingWaitStrategy());
-            TestConsumers.TestSequence handler = new TestConsumers.TestSequence("TestMultiIncrementSequence", resetEvent);
-            handler.totalExpected = numberPerThread * numberOfThreads;
+            TestConsumers.TestMultiThreadedSequence handler = new TestConsumers.TestMultiThreadedSequence("TestMultiIncrementSequence", resetEvent,numberOfThreads);
+            handler.totalExpected = totalNumber;
             disruptor.handleEventsWith(handler);
             disruptor.start();
           
@@ -56,16 +94,16 @@ namespace Disruptor_Net3.Console
                 Task.Factory.StartNew(() =>
                 {
 
-                    Int64 currentCounter = 1;
+                    PaddedLong currentCounter = new PaddedLong();
+                    currentCounter.value = 1;
 
-                    while (currentCounter <= numberPerThread)
+                    while (currentCounter.value <= numberPerThread)
                     {
                         long sequence = ringBuffer.next();
                         TestEvent tEvent = ringBuffer.get(sequence);
-                        tEvent.value = i;
                         ringBuffer.publish(sequence);
 
-                        currentCounter++;
+                        currentCounter.value++;
                     }
                 });
 
@@ -93,16 +131,17 @@ namespace Disruptor_Net3.Console
             {
                 Task.Factory.StartNew(() => {
 
-                    Int64 currentCounter = 1;
+                    PaddedLong currentCounter = new PaddedLong();
+                    currentCounter.value = 1;
 
-                    while(currentCounter<=numberPerThread)
+                    while(currentCounter.value<=numberPerThread)
                     {
                         long sequence = ringBuffer.next();
                         TestEvent tEvent = ringBuffer.get(sequence);
                         tEvent.value = i;
                         ringBuffer.publish(sequence);
 
-                        currentCounter++;
+                        currentCounter.value++;
                     }
                 });
 
