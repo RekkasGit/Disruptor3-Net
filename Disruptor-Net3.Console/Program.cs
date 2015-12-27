@@ -7,6 +7,7 @@ using Disruptor_Net3;
 using System.Threading;
 using Disruptor_Net3.Console.Events;
 using Disruptor_Net3.Console.Factories;
+using System.Diagnostics;
 
 namespace Disruptor_Net3.Console
 {
@@ -14,33 +15,49 @@ namespace Disruptor_Net3.Console
     {
         static void Main(string[] args)
         {
+            System.Diagnostics.Process.GetCurrentProcess().PriorityClass = ProcessPriorityClass.AboveNormal;
+
+            Trace.Listeners.Add(new TextWriterTraceListener(System.Console.Out));
+
             System.Console.WriteLine("Press enter to start test");
             System.Console.ReadLine();
-            
             TestMultiIncrementSequence();
             TestMultiThreading();
             TestMulti3P1C();
             TestSingleThreading();
+            FizzBuzz1P3CBlockingCollection();
             FizzBuzz1P3C();
+            
             System.Console.ReadLine();
+        }
+        public static void FizzBuzz1P3CBlockingCollection()
+        {
+            System.Console.WriteLine("============================");
+            System.Console.WriteLine("Starting FizzBuzz1P3CBlockingCollection Test");
+
+            Disruptor_Net3.Tests.FizzBuzz1P3CBlockingCollectionPerfTest test = new Tests.FizzBuzz1P3CBlockingCollectionPerfTest();
+            test.RunPass();
+            System.Console.WriteLine("============================");
+         
         }
         public static void FizzBuzz1P3C()
         {
+            System.Console.WriteLine("============================");
             System.Console.WriteLine("Starting FizzBuzz1P3C Test");
           
             Disruptor_Net3.Tests.FizzBuzz1P3C test = new Tests.FizzBuzz1P3C();
-            System.Diagnostics.Stopwatch stopwatch = new System.Diagnostics.Stopwatch();
-            stopwatch.Start();
-        
+         
             test.FizzBuzz1P3CDisruptorPerfTest();
-            stopwatch.Stop();
-            System.Console.WriteLine("Total time for FizzBuzz1P3C:" + stopwatch.Elapsed.TotalMilliseconds);
+            System.Console.WriteLine("============================");
+        
         }
         public static void TestMulti3P1C()
         {
-            System.Console.WriteLine("Starting TestMulti3P1C Test");
             Int32 numberOfThreads = 3;
-            Int32 totalNumber = 100000000;
+            Int32 totalNumber = 10000000;
+            System.Console.WriteLine("============================");
+            System.Console.WriteLine("Starting TestMulti3P1C Test with "+String.Format("{0:###,###,###,###} entries",totalNumber));
+           
             ManualResetEventSlim resetEvent = new ManualResetEventSlim(false);
             dsl.Disruptor<Test3P1CEvent> disruptor = new dsl.Disruptor<Test3P1CEvent>(new Test3P1CEventFactory(), 1024, dsl.ProducerType.MULTI, new Disruptor_Net3.WaitStrategies.BlockingWaitStrategy());
             TestXP1CConsumer handler = new TestXP1CConsumer("TestMulti3P1C", resetEvent,numberOfThreads);
@@ -72,17 +89,20 @@ namespace Disruptor_Net3.Console
             }
             resetEvent.Wait();
             disruptor.shutdown();
-
+            System.Console.WriteLine("============================");
+       
 
         }
         public static void TestMultiIncrementSequence()
         {
-            System.Console.WriteLine("Starting TestMultiIncrementSequence Test");
+            System.Console.WriteLine("============================");
             Int32 numberOfThreads = 3;
-            Int32 totalNumber = 300000000;
+            Int32 totalNumber = 30000000;
             Int32 numberPerThread = totalNumber / numberOfThreads;
+
+            System.Console.WriteLine("Starting TestMultiIncrementSequence Test with " + String.Format("{0:###,###,###,###} entries", totalNumber) + " and with "+numberOfThreads + " threads");
             ManualResetEventSlim resetEvent = new ManualResetEventSlim(false);
-            dsl.Disruptor<TestEvent> disruptor = new dsl.Disruptor<TestEvent>(new TestEventFactory(), 1024, dsl.ProducerType.MULTI, new Disruptor_Net3.WaitStrategies.BlockingWaitStrategy());
+            dsl.Disruptor<TestEvent> disruptor = new dsl.Disruptor<TestEvent>(new TestEventFactory(), 1024, dsl.ProducerType.MULTI, new Disruptor_Net3.WaitStrategies.BusySpinWaitStrategy());
             TestConsumers.TestMultiThreadedSequence handler = new TestConsumers.TestMultiThreadedSequence("TestMultiIncrementSequence", resetEvent,numberOfThreads);
             handler.totalExpected = totalNumber;
             disruptor.handleEventsWith(handler);
@@ -110,16 +130,20 @@ namespace Disruptor_Net3.Console
             }
             resetEvent.Wait();
             disruptor.shutdown();
+            System.Console.WriteLine("============================");
+        
         }
         //about 16-18 million per second i72600k
         public static void TestMultiThreading()
         {
-            System.Console.WriteLine("Starting TestMultiThreading Test");
+            System.Console.WriteLine("============================");
+ 
             Int32 numberOfThreads = 3;
-            Int32 totalNumber = 100000000;
+            Int32 totalNumber = 10000000;
             Int32 numberPerThread = totalNumber / numberOfThreads;
             ManualResetEventSlim resetEvent = new ManualResetEventSlim(false);
-        
+            System.Console.WriteLine("Starting TestMultiThreading Test with " + String.Format("{0:###,###,###,###} entries", totalNumber) + " and with " + numberOfThreads + " threads");
+         
             dsl.Disruptor<TestEvent> disruptor = new dsl.Disruptor<TestEvent>(new TestEventFactory(), 1024, dsl.ProducerType.MULTI, new Disruptor_Net3.WaitStrategies.BusySpinWaitStrategy());
             TestConsumer handler = new TestConsumer("TestMultiThreading",resetEvent);
             handler.totalExpected = numberPerThread * numberOfThreads;
@@ -148,13 +172,18 @@ namespace Disruptor_Net3.Console
             }
             resetEvent.Wait();
             disruptor.shutdown();
-
+            System.Console.WriteLine("============================");
+ 
         }
         //about 94,795,715 ops per second on a i72600k
         public static void TestSingleThreading()
         {
-            Int32 totalNumber = 1000000000;
-            System.Console.WriteLine("Starting TestSingleThreading Test");
+            System.Console.WriteLine("============================");
+ 
+            Int32 totalNumber = 100000000;
+            System.Console.WriteLine("Starting TestSingleThreading Test with " + String.Format("{0:###,###,###,###} entries", totalNumber) + " and a single thread");
+         
+         
             ManualResetEventSlim resetEvent = new ManualResetEventSlim(false);
         
             dsl.Disruptor<TestEvent> disruptor = new dsl.Disruptor<TestEvent>(new TestEventFactory(), 1024, dsl.ProducerType.SINGLE, new Disruptor_Net3.WaitStrategies.BusySpinWaitStrategy());
@@ -179,7 +208,8 @@ namespace Disruptor_Net3.Console
             }
             resetEvent.Wait();
             disruptor.shutdown();
-            
+            System.Console.WriteLine("============================");
+ 
 
         }
 
