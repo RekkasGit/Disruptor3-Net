@@ -90,7 +90,8 @@ namespace Disruptor_Net3
         */
         public virtual void set(long value)
         {
-            paddedValue.value = value;
+            Volatile.Write(ref paddedValue.value, value);
+            //paddedValue.value = value;
             //Interlocked.Exchange(ref paddedValue.value,value);
         }
 

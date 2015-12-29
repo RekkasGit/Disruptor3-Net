@@ -180,7 +180,7 @@ namespace Disruptor_Net3.Console
         {
             System.Console.WriteLine("============================");
  
-            Int32 totalNumber = 100000000;
+            Int32 totalNumber = 1000000000;
             System.Console.WriteLine("Starting TestSingleThreading Test with " + String.Format("{0:###,###,###,###} entries", totalNumber) + " and a single thread");
          
          
