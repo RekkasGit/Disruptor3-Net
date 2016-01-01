@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -59,9 +60,11 @@ namespace Disruptor_Net3.Util
          * returned.
          * @return the minimum sequence found or Long.MAX_VALUE if the array is empty.
          */
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static long getMinimumSequence(Sequence[] sequences, Int64 minimum)
         {
-            for (int i = 0, n = sequences.Length; i < n; i++)
+
+            for (int i = 0; i < sequences.Length; i++)
             {
                 Int64 value = sequences[i].get();
                 minimum = Math.Min(minimum, value);

@@ -3,6 +3,7 @@ using Disruptor_Net3.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -38,6 +39,7 @@ namespace Disruptor_Net3.Sequencers
             long produced = cursor.get();
             return getBufferSize() - (produced - consumed);
         }
+       // [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public override long next()
         {
             return next(1);
@@ -51,9 +53,11 @@ namespace Disruptor_Net3.Sequencers
 
             long current;
             long next;
-            var spinWait = default(SpinWait);
+          //  var spinWait = default(SpinWait);
+            PaddedLong counter = new PaddedLong();
             do
             {
+                counter.value++;
                 current = cursor.get();
                 next = current + n;
 
@@ -66,7 +70,12 @@ namespace Disruptor_Net3.Sequencers
 
                     if (wrapPoint > gatingSequence)
                     {
-                        spinWait.SpinOnce(); ; // TODO, should we spin based on the wait strategy?
+                        if (counter.value % 1000 == 0)
+                        {
+                            Thread.Yield();
+                        }
+                        
+                       // spinWait.SpinOnce(); ; // TODO, should we spin based on the wait strategy?
                         continue;
                     }
 
@@ -177,12 +186,12 @@ namespace Disruptor_Net3.Sequencers
         {
             Interlocked.Exchange(ref availableBuffer[index], flag);
         }
-        
+        //[MethodImpl(MethodImplOptions.AggressiveInlining)]
         private int calculateAvailabilityFlag(long sequence)
         {
             return (int) (((UInt64)sequence) >> indexShift);
         }
-
+        //[MethodImpl(MethodImplOptions.AggressiveInlining)]
         private int calculateIndex(long sequence)
         {
             return ((int) sequence) & indexMask;

@@ -15,19 +15,18 @@ namespace Disruptor_Net3.Tests.Handlers
         private readonly FizzBuzzStep _fizzBuzzStep;
         private readonly long _iterations;
         private readonly ManualResetEvent _mru;
-        private PaddedLong _fizzBuzzCounter;
+        private Int64 _fizzBuzzCounter;
 
         public long FizzBuzzCounter
         {
-            get { return _fizzBuzzCounter.value; }
+            get { return _fizzBuzzCounter; }
         }
-
         public FizzBuzzEventHandler(FizzBuzzStep fizzBuzzStep, long iterations, ManualResetEvent mru)
         {
             _fizzBuzzStep = fizzBuzzStep;
-            _iterations = iterations;
+            _iterations = iterations-1;
             _mru = mru;
-            _fizzBuzzCounter.value = 0;
+            _fizzBuzzCounter = 0;
         }
 
         public void onEvent(FizzBuzzEvent data, long sequence, bool endOfBatch)
@@ -35,20 +34,22 @@ namespace Disruptor_Net3.Tests.Handlers
             switch (_fizzBuzzStep)
             {
                 case FizzBuzzStep.Fizz:
-                    data.Fizz = (data.Value % 3) == 0;
+                   
+                    data.Fizz = data.Value % 3;
                     break;
                 case FizzBuzzStep.Buzz:
-                    data.Buzz = (data.Value % 5) == 0;
+                         
+                    data.Buzz = data.Value % 5;
                     break;
 
                 case FizzBuzzStep.FizzBuzz:
-                    if (data.Fizz && data.Buzz)
+                    if (data.Fizz==0 && data.Buzz==0)
                     {
-                        _fizzBuzzCounter.value++;
+                        _fizzBuzzCounter++;
                     }
                     break;
             }
-            if (sequence == _iterations - 1)
+            if (sequence == _iterations)
             {
                 _mru.Set();
             }

@@ -34,8 +34,7 @@ namespace Disruptor_Net3
          * @return the minimum sequence value for the group.
          */
 
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public override long get()
+       public override long get()
         {
             return Util.Util.getMinimumSequence(sequences);
         }
@@ -45,7 +44,6 @@ namespace Disruptor_Net3
          *
          * @param value to set the group of sequences to.
          */
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public override void set(long value)
         {
             Sequence[] sequences = this.sequences;

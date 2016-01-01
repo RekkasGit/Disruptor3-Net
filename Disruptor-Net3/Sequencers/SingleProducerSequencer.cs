@@ -3,32 +3,56 @@ using Disruptor_Net3.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
 namespace Disruptor_Net3.Sequencers
 {
-    public abstract class SingleProducerSequencerPad : AbstractSequencer
-    {
-        protected long p1, p2, p3, p4, p5, p6, p7;
-        public SingleProducerSequencerPad(int bufferSize, IWaitStrategy waitStrategy):base(bufferSize,waitStrategy)
-        {
-           
-        }
-    }
 
-    public abstract class SingleProducerSequencerFields:SingleProducerSequencerPad
-    {
-        public SingleProducerSequencerFields(int bufferSize, IWaitStrategy waitStrategy):base(bufferSize,waitStrategy)
-        {
-           
-        }
 
-        /** Set to -1 as sequence starting point */
-        protected long nextValue = Sequence.INITIAL_VALUE;
-        protected long cachedValue = Sequence.INITIAL_VALUE;
+
+
+    [StructLayout(LayoutKind.Explicit, Size = 136)]
+    public struct PaddedSingleSequence
+    {
+        [FieldOffset(0)]
+        Int64 p1;
+        [FieldOffset(8)]
+        Int64 p2;
+        [FieldOffset(16)]
+        Int64 p3;
+        [FieldOffset(24)]
+        Int64 p4;
+        [FieldOffset(32)]
+        Int64 p5;
+        [FieldOffset(40)]
+        Int64 p6;
+        [FieldOffset(48)]
+        Int64 p7;
+        [FieldOffset(56)]
+        Int64 p8;
+        [FieldOffset(64)]
+        public Int64 nextValue;
+        [FieldOffset(72)]
+        public Int64 cachedValue;
+        [FieldOffset(80)]
+        Int64 p10;
+        [FieldOffset(88)]
+        Int64 p11;
+        [FieldOffset(96)]
+        Int64 p12;
+        [FieldOffset(104)]
+        Int64 p13;
+        [FieldOffset(112)]
+        Int64 p14;
+        [FieldOffset(120)]
+        Int64 p15;
+        [FieldOffset(128)]
+        Int64 p16;
     }
+   
 
     /**
      * <p>Coordinator for claiming sequences for access to a data structure while tracking dependent {@link Sequence}s.
@@ -38,10 +62,10 @@ namespace Disruptor_Net3.Sequencers
      * to {@link Sequencer#publish(long)} is made.
      */
 
-    public class SingleProducerSequencer:SingleProducerSequencerFields
+    public class SingleProducerSequencer:AbstractSequencer
     {
-        protected long p8, p9, p10, p11, p12, p13, p14;
 
+        PaddedSingleSequence padSequence = new PaddedSingleSequence();
         /**
          * Construct a Sequencer with the selected wait strategy and buffer size.
          *
@@ -50,7 +74,10 @@ namespace Disruptor_Net3.Sequencers
          */
         public SingleProducerSequencer(int bufferSize, IWaitStrategy waitStrategy):base(bufferSize,waitStrategy)
         {
-         
+
+            padSequence.nextValue = Sequence.INITIAL_VALUE;
+            padSequence.cachedValue = Sequence.INITIAL_VALUE;
+
         }
 
         /**
@@ -59,15 +86,15 @@ namespace Disruptor_Net3.Sequencers
         
         public override Boolean hasAvailableCapacity(int requiredCapacity)
         {
-            long nextValue = this.nextValue;
+            long nextValue = padSequence.nextValue;
 
             long wrapPoint = (nextValue + requiredCapacity) - bufferSize;
-            long cachedGatingSequence = this.cachedValue;
+            long cachedGatingSequence = padSequence.cachedValue;
 
             if (wrapPoint > cachedGatingSequence || cachedGatingSequence > nextValue)
             {
                 long minSequence = Util.Util.getMinimumSequence(gatingSequences, nextValue);
-                this.cachedValue = minSequence;
+                padSequence.cachedValue = minSequence;
 
                 if (wrapPoint > minSequence)
                 {
@@ -98,26 +125,30 @@ namespace Disruptor_Net3.Sequencers
                 throw new ArgumentOutOfRangeException("n must be > 0");
             }
 
-            long nextValue = this.nextValue;
+            long nextValue = padSequence.nextValue;
 
             long nextSequence = nextValue + n;
             long wrapPoint = nextSequence - bufferSize;
-            long cachedGatingSequence = this.cachedValue;
+            long cachedGatingSequence = padSequence.cachedValue;
 
             if (wrapPoint > cachedGatingSequence || cachedGatingSequence > nextValue)
             {
                 long minSequence;
-                var spinlock = default(SpinWait);
+                Int64 counter = 0;
                 while (wrapPoint > (minSequence = Util.Util.getMinimumSequence(gatingSequences, nextValue)))
                 {
-                    spinlock.SpinOnce();
+                    Thread.Yield();
+                    //counter++;
+                    //if (counter % 100 == 0)
+                    //{
+                    //    Thread.Yield();
+                    //}
                     //LockSupport.parkNanos(1L); // TODO: Use waitStrategy to spin?
                 }
-
-                this.cachedValue = minSequence;
+                padSequence.cachedValue = minSequence;
             }
 
-            this.nextValue = nextSequence;
+            padSequence.nextValue = nextSequence;
 
             return nextSequence;
         }
@@ -146,7 +177,7 @@ namespace Disruptor_Net3.Sequencers
                 throw InsufficientCapacityException.INSTANCE;
             }
 
-            long nextSequence = this.nextValue += n;
+            long nextSequence = padSequence.nextValue += n;
 
             return nextSequence;
         }
@@ -157,7 +188,7 @@ namespace Disruptor_Net3.Sequencers
        
         public override long remainingCapacity()
         {
-            long nextValue = this.nextValue;
+            long nextValue = padSequence.nextValue;
 
             long consumed = Util.Util.getMinimumSequence(gatingSequences, nextValue);
             long produced = nextValue;
@@ -170,7 +201,7 @@ namespace Disruptor_Net3.Sequencers
        
         public override void claim(long sequence)
         {
-            this.nextValue = sequence;
+            padSequence.nextValue = sequence;
         }
 
         /**

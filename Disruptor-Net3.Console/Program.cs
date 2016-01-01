@@ -8,6 +8,7 @@ using System.Threading;
 using Disruptor_Net3.Console.Events;
 using Disruptor_Net3.Console.Factories;
 using System.Diagnostics;
+using Disruptor_Net3.Interfaces;
 
 namespace Disruptor_Net3.Console
 {
@@ -21,14 +22,70 @@ namespace Disruptor_Net3.Console
 
             System.Console.WriteLine("Press enter to start test");
             System.Console.ReadLine();
+           
+           // TestBatch();
             TestMultiIncrementSequence();
             TestMultiThreading();
             TestMulti3P1C();
             TestSingleThreading();
             FizzBuzz1P3CBlockingCollection();
-            FizzBuzz1P3C();
+
+            for (Int32 i = 0; i < 3; i++)
+            {
+                FizzBuzz1P3C();
+                System.Threading.Thread.Sleep(5000);
+            }
+         
             
             System.Console.ReadLine();
+        }
+
+        public static void TestBatch()
+        {
+            System.Console.WriteLine("============================");
+
+            Int32 totalNumber = 1000000000;
+            System.Console.WriteLine("Starting TestBatch Test with " + String.Format("{0:###,###,###,###} entries", totalNumber) + " and a single thread");
+
+      
+            ManualResetEventSlim resetEvent = new ManualResetEventSlim(false);
+
+            TestConsumer handler = new TestConsumer("TestSingleThreading", resetEvent);
+            handler.totalExpected = totalNumber;
+            RingBuffer<TestEvent> ringBuffer = RingBuffer<TestEvent>.createSingleProducer(new TestEventFactory(), 1024, new WaitStrategies.BusySpinWaitStrategy());
+
+            ISequenceBarrier sBarrier = ringBuffer.newBarrier();
+
+
+            BatchEventProcessor<TestEvent> batchEventProcessor = new BatchEventProcessor<TestEvent>(ringBuffer, sBarrier, handler);
+            ringBuffer.addGatingSequences(batchEventProcessor.getSequence());
+
+            long expectedCount = batchEventProcessor.getSequence().get() + totalNumber;
+      
+            Task.Factory.StartNew(() => batchEventProcessor.run(), TaskCreationOptions.LongRunning);
+     
+            Int64 currentCounter = 0;
+            while (currentCounter < totalNumber)
+            {
+                long sequence = ringBuffer.next();
+                TestEvent tEvent = ringBuffer.get(sequence);
+                tEvent.value = 1;
+
+                ringBuffer.publish(sequence);
+
+                currentCounter++;
+            }
+
+            while(batchEventProcessor.getSequence().get()!=expectedCount)
+            {
+                Thread.Sleep(1);
+            }
+
+            batchEventProcessor.halt();
+
+            System.Console.WriteLine("============================");
+ 
+
         }
         public static void FizzBuzz1P3CBlockingCollection()
         {
@@ -139,7 +196,7 @@ namespace Disruptor_Net3.Console
             System.Console.WriteLine("============================");
  
             Int32 numberOfThreads = 3;
-            Int32 totalNumber = 10000000;
+            Int32 totalNumber = 100000000;
             Int32 numberPerThread = totalNumber / numberOfThreads;
             ManualResetEventSlim resetEvent = new ManualResetEventSlim(false);
             System.Console.WriteLine("Starting TestMultiThreading Test with " + String.Format("{0:###,###,###,###} entries", totalNumber) + " and with " + numberOfThreads + " threads");

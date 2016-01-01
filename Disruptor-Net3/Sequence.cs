@@ -43,7 +43,7 @@ namespace Disruptor_Net3
     public class Sequence
     {
         public PaddedLong paddedValue = new PaddedLong();
-        public static Int64 INITIAL_VALUE = -1L;
+        public const Int64 INITIAL_VALUE = -1L;
         
         /**
          * Create a sequence initialised to -1.
@@ -68,8 +68,7 @@ namespace Disruptor_Net3
          *
          * @return The current value of the sequence.
          */
-        
-        public virtual long get()
+         public virtual long get()
         {
             return Volatile.Read(ref  paddedValue.value);
         }
@@ -115,6 +114,7 @@ namespace Disruptor_Net3
          * @param newValue The value to update to.
          * @return true if the operation succeeds, false otherwise.
          */
+        //[MethodImpl(MethodImplOptions.AggressiveInlining)]
         public virtual Boolean compareAndSet(long expectedValue, long newValue)
         {
             return  Interlocked.CompareExchange(ref paddedValue.value,newValue,expectedValue)==expectedValue;

@@ -20,13 +20,13 @@ namespace Disruptor_Net3.Tests
         private FizzBuzzEventHandler _fizzBuzzEventHandler;
         private ManualResetEvent _mru;
         private Disruptor<FizzBuzzEvent> _disruptor;
-        public FizzBuzz1P3C():base(1000 * Million)
+        public FizzBuzz1P3C():base(300 * Million)
         {
         }
         [TestMethod]
         public void FizzBuzz1P3CDisruptorPerfTest()
         {
-            _disruptor = new Disruptor<FizzBuzzEvent>( new FizzBuzzEventFactory(), 1024, ProducerType.SINGLE,new WaitStrategies.BusySpinWaitStrategy());
+            _disruptor = new Disruptor<FizzBuzzEvent>( new FizzBuzzEventFactory(), 1024, ProducerType.SINGLE,new WaitStrategies.YieldingWaitStrategy());
 
             _mru = new ManualResetEvent(false);
             _fizzEventHandler = new FizzBuzzEventHandler(FizzBuzzStep.Fizz, Iterations, _mru);
@@ -36,28 +36,29 @@ namespace Disruptor_Net3.Tests
     
             _ringBuffer = _disruptor.getRingBuffer();
             _disruptor.start();
-
-            var sw = Stopwatch.StartNew();
+           var sw = Stopwatch.StartNew();
 
             for (long i = 0; i < Iterations; i++)
             {
                 var sequence = _ringBuffer.next();
-                _ringBuffer.get(sequence).Value = i;
+                var entry = _ringBuffer.get(sequence);
+                entry.Value = i;
                 _ringBuffer.publish(sequence);
             }
 
             _mru.WaitOne();
+
+           
             sw.Stop();
-            var opsPerSecond = (Iterations * 1000L) / sw.ElapsedMilliseconds;
-
-            _disruptor.shutdown();
+            var opsPerSecond = (Iterations * 1000L) / sw.Elapsed.TotalMilliseconds;
             Int64 expectedResult = ExpectedResult;
-
-            Assert.AreEqual(expectedResult, _fizzBuzzEventHandler.FizzBuzzCounter);
+            _ringBuffer.getCursor();
+         
             Trace.WriteLine("Expected:" + expectedResult + " Recieved:" + _fizzBuzzEventHandler.FizzBuzzCounter);
+            Assert.AreEqual(expectedResult, _fizzBuzzEventHandler.FizzBuzzCounter);
             Trace.WriteLine(String.Format("{0}: {1:###,###,###,###}op/sec for {2:###,###,###,###} iterations.", GetType().Name, opsPerSecond, Iterations));
             Trace.WriteLine("Total time in MS:" + sw.Elapsed.TotalMilliseconds);
-   
+            _disruptor.shutdown();
         }
       
     }
