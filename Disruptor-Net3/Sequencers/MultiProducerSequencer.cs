@@ -39,11 +39,12 @@ namespace Disruptor_Net3.Sequencers
             long produced = cursor.get();
             return getBufferSize() - (produced - consumed);
         }
-       // [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public override long next()
         {
             return next(1);
         }
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public override long next(int n)
         {
             if (n < 1)
@@ -53,28 +54,30 @@ namespace Disruptor_Net3.Sequencers
 
             long current;
             long next;
-          //  var spinWait = default(SpinWait);
-            PaddedLong counter = new PaddedLong();
+            Int64 counter = 0;
             do
             {
-                counter.value++;
                 current = cursor.get();
                 next = current + n;
 
                 long wrapPoint = next - bufferSize;
                 long cachedGatingSequence = gatingSequenceCache.get();
-
+                
                 if (wrapPoint > cachedGatingSequence || cachedGatingSequence > current)
                 {
                     long gatingSequence = Util.Util.getMinimumSequence(gatingSequences, current);
 
                     if (wrapPoint > gatingSequence)
                     {
-                        if (counter.value % 1000 == 0)
+                        counter++;
+                        if(counter%100==0)
                         {
                             Thread.Yield();
                         }
-                        
+                        else if(counter%1001==0)
+                        {
+                            Thread.Sleep(1);
+                        }
                        // spinWait.SpinOnce(); ; // TODO, should we spin based on the wait strategy?
                         continue;
                     }

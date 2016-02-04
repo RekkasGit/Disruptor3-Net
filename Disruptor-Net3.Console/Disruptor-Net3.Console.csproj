@@ -54,7 +54,9 @@
     <Compile Include="Factories\TestEventFactory.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="App.config" />
+    <None Include="App.config">
+      <SubType>Designer</SubType>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Disruptor-Net3.Tests\Disruptor-Net3.Tests.csproj">

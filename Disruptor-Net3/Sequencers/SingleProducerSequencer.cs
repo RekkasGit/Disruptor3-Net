@@ -137,12 +137,15 @@ namespace Disruptor_Net3.Sequencers
                 Int64 counter = 0;
                 while (wrapPoint > (minSequence = Util.Util.getMinimumSequence(gatingSequences, nextValue)))
                 {
-                    Thread.Yield();
-                    //counter++;
-                    //if (counter % 100 == 0)
-                    //{
-                    //    Thread.Yield();
-                    //}
+                    counter++;
+                    if (counter % 100 == 0)
+                    {
+                        Thread.Yield();
+                    }
+                    else if (counter % 10001 == 0)
+                    {
+                        Thread.Sleep(1);
+                    }
                     //LockSupport.parkNanos(1L); // TODO: Use waitStrategy to spin?
                 }
                 padSequence.cachedValue = minSequence;
