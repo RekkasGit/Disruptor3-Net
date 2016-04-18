@@ -10,77 +10,63 @@ Performance numbers, as they always are what people are looking for.
 
 Single producer single consumer using batch.
 
-============================
 Starting Test1P1CBatch **Batch** Test with 1,000,000,000 entries and a single thread
 [Test1P1CBatch] Consumer is done processing Events! Total Time in milliseconds:6124.9933 163,265,485op/sec
-============================
-============================
+
 Starting Test1P1CBatch **Batch** Test with 1,000,000,000 entries and a single thread
 [Test1P1CBatch] Consumer is done processing Events! Total Time in milliseconds:6057.9575 165,072,139op/sec
-============================
-============================
+
 Starting Test1P1CBatch **Batch** Test with 1,000,000,000 entries and a single thread
 [Test1P1CBatch] Consumer is done processing Events! Total Time in milliseconds:6134.7049 163,007,026op/sec
-============================
-============================
+
 Starting Test1P1CBatch **Batch** Test with 1,000,000,000 entries and a single thread
 [Test1P1CBatch] Consumer is done processing Events! Total Time in milliseconds:6134.8383 163,003,481op/sec
-============================
 
 
 Single consumer, single producer, but not using batch. This tends to fluxuate a bit.
-============================
+
 Starting Test1P1C Test with 1,000,000,000 entries and a single thread
 [TestSingleThreading] Consumer is done processing Events! Total Time in milliseconds:13833.3955 72,288,832op/sec
-============================
-============================
+
 Starting Test1P1C Test with 1,000,000,000 entries and a single thread
 [TestSingleThreading] Consumer is done processing Events! Total Time in milliseconds:10664.2537 93,771,213op/sec
-============================
-============================
+
 Starting Test1P1C Test with 1,000,000,000 entries and a single thread
 [TestSingleThreading] Consumer is done processing Events! Total Time in milliseconds:12565.4032 79,583,598op/sec
-============================
-============================
+
 Starting Test1P1C Test with 1,000,000,000 entries and a single thread
 [TestSingleThreading] Consumer is done processing Events! Total Time in milliseconds:10404.4818 96,112,427op/sec
-============================
+
 
 
 Multi producer, single consumer , using batch.
 
 Starting Test3P1CBatch **Batch** Test with 600,000,000 entries
 [Test3P1CBatch] Consumer is done processing Events! Total Time in milliseconds:7138.7307 84,048,555op/sec
-============================
+
 Starting Test3P1CBatch **Batch** Test with 600,000,000 entries
 [Test3P1CBatch] Consumer is done processing Events! Total Time in milliseconds:7259.6242 82,648,906op/sec
-============================
+
 Starting Test3P1CBatch **Batch** Test with 600,000,000 entries
 [Test3P1CBatch] Consumer is done processing Events! Total Time in milliseconds:7123.6162 84,226,885op/sec
-============================
+
 Starting Test3P1CBatch **Batch** Test with 600,000,000 entries
 [Test3P1CBatch] Consumer is done processing Events! Total Time in milliseconds:7223.8552 83,058,143op/sec
-============================
 
 
 Multi producer single consumer, not using batch.
 
-============================
 Starting TestMulti3P1C Test with 90,000,000 entries
 [TestMulti3P1C] Consumer is done processing Events! Total Time in milliseconds:7109.6871 12,658,785op/sec
-============================
-============================
+
 Starting TestMulti3P1C Test with 90,000,000 entries
 [TestMulti3P1C] Consumer is done processing Events! Total Time in milliseconds:7071.3333 12,727,444op/sec
-============================
-============================
+
 Starting TestMulti3P1C Test with 90,000,000 entries
 [TestMulti3P1C] Consumer is done processing Events! Total Time in milliseconds:7466.917 12,053,167op/sec
-============================
-============================
+
 Starting TestMulti3P1C Test with 90,000,000 entries
 [TestMulti3P1C] Consumer is done processing Events! Total Time in milliseconds:8295.9761 10,848,633op/sec
-============================
 
 
 Round numbers from a colleague's performance test program
