@@ -184,10 +184,20 @@ namespace Disruptor_Net3.Sequencers
         {
             setAvailableBufferValue(calculateIndex(sequence), calculateAvailabilityFlag(sequence));
         }
-
-        private void setAvailableBufferValue(int index, int flag)
+        unsafe void putOrderedInt(int* obj, Int32 offset, int value)
         {
-            Interlocked.Exchange(ref availableBuffer[index], flag);
+            unsafe
+            {
+                
+                Thread.MemoryBarrier();
+                obj[offset] = value;
+            }
+        }
+      
+        unsafe private void setAvailableBufferValue(int index, int flag)
+        {
+           Interlocked.Exchange(ref availableBuffer[index], flag);
+        
         }
         //[MethodImpl(MethodImplOptions.AggressiveInlining)]
         private int calculateAvailabilityFlag(long sequence)

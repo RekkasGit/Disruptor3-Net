@@ -117,6 +117,7 @@ namespace Disruptor_Net3
         //[MethodImpl(MethodImplOptions.AggressiveInlining)]
         public virtual Boolean compareAndSet(long expectedValue, long newValue)
         {
+           
             return  Interlocked.CompareExchange(ref paddedValue.value,newValue,expectedValue)==expectedValue;
         }
 

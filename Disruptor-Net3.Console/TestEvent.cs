@@ -8,7 +8,7 @@ namespace Disruptor_Net3.Console
 {
     public class TestEvent
     {
-        public Int32 value = 0;
+        public Int64 value = 0;
 
     }
 }

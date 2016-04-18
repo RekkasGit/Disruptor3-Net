@@ -9,6 +9,7 @@ using Disruptor_Net3.Console.Events;
 using Disruptor_Net3.Console.Factories;
 using System.Diagnostics;
 using Disruptor_Net3.Interfaces;
+using Disruptor_Net3.dsl;
 
 namespace Disruptor_Net3.Console
 {
@@ -23,77 +24,146 @@ namespace Disruptor_Net3.Console
             System.Console.WriteLine("Press enter to start test");
             System.Console.ReadLine();
 
-           // TestBatch();
-            //TestMultiIncrementSequence();
-            TestMultiThreading();
-            //TestMulti3P1C();
-            //TestSingleThreading();
-           // FizzBuzz1P3CBlockingCollection();
-            for (Int32 i = 0; i < 3; i++)
+            for(Int32 i = 0;i<4;i++)
             {
-                TestSingleThreading();
-                System.Threading.Thread.Sleep(5000);
+                Test1P1CBatch();
+                Test3P1CBatch();
+                Test1P1C();
+                TestMulti3P1C();
+               
             }
-            //for (Int32 i = 0; i < 3; i++)
-            //{
-            //    FizzBuzz1P3C();
-            //    System.Threading.Thread.Sleep(5000);
-            //}
-         
-            
+
+  
+
             System.Console.ReadLine();
         }
-
-        public static void TestBatch()
+        public static void Test1P1CBatch()
         {
+
             System.Console.WriteLine("============================");
 
+            //Int32 totalNumber = 1000000000;
             Int32 totalNumber = 1000000000;
-            System.Console.WriteLine("Starting TestBatch Test with " + String.Format("{0:###,###,###,###} entries", totalNumber) + " and a single thread");
-            
+            System.Console.WriteLine("Starting Test1P1CBatch **Batch** Test with " + String.Format("{0:###,###,###,###} entries", totalNumber) + " and a single thread");
+
+
+            ManualResetEventSlim resetEvent = new ManualResetEventSlim(false);
+
+            dsl.Disruptor<TestEvent> disruptor = new dsl.Disruptor<TestEvent>(new TestEventFactory(), 1024 * 2, dsl.ProducerType.SINGLE, new Disruptor_Net3.WaitStrategies.BusySpinWaitStrategy());
             TestConsumer handler = new TestConsumer("TestSingleThreading");
-            RingBuffer<TestEvent> ringBuffer = RingBuffer<TestEvent>.createSingleProducer(new TestEventFactory(), 1024, new WaitStrategies.BusySpinWaitStrategy());
+            disruptor.handleEventsWith(handler);
+            disruptor.start();
 
-            ISequenceBarrier sBarrier = ringBuffer.newBarrier();
+            RingBuffer<TestEvent> ringBuffer = disruptor.getRingBuffer();
 
 
-            BatchEventProcessor<TestEvent> batchEventProcessor = new BatchEventProcessor<TestEvent>(ringBuffer, sBarrier, handler);
-            ringBuffer.addGatingSequences(batchEventProcessor.getSequence());
-
-            long expectedCount = batchEventProcessor.getSequence().get() + totalNumber;
-      
-            Task.Factory.StartNew(() => batchEventProcessor.run(), TaskCreationOptions.LongRunning);
-     
             Int64 currentCounter = 0;
             System.Diagnostics.Stopwatch stopwatch = new Stopwatch();
+
+            Int32 batchSize = 100;
             stopwatch.Start();
-      
             while (currentCounter < totalNumber)
             {
-                long sequence = ringBuffer.next();
-                TestEvent tEvent = ringBuffer.get(sequence);
-                tEvent.value = 1;
+                if (currentCounter + batchSize < totalNumber)
+                {
+                    var sequence = ringBuffer.next(batchSize);
+                    var low = sequence - batchSize + 1;
+                    Int64 originalLow = low;
+                    for (; low <= sequence; low++)
+                    {
+                        var entry = ringBuffer.get(low);
+                        entry.value = 1;
+                      
+                    }
+                    ringBuffer.publish(originalLow,sequence);
+                    currentCounter += batchSize - 1;
 
-                ringBuffer.publish(sequence);
+                }
+                else
+                {
 
+                    long sequence = ringBuffer.next();
+                    TestEvent tEvent = ringBuffer.get(sequence);
+                    tEvent.value = 1;
+                    ringBuffer.publish(sequence);
+
+
+                }
                 currentCounter++;
             }
 
-            while(batchEventProcessor.getSequence().get()!=expectedCount)
+            while (ringBuffer.getCursor() != (totalNumber - 1))
             {
                 Thread.Sleep(1);
             }
-
             stopwatch.Stop();
-            System.Console.WriteLine("[TestBatch] Consumer is done processing Events! Total Time in milliseconds:" + stopwatch.Elapsed.TotalMilliseconds + " " + String.Format("{0:###,###,###,###}op/sec", ((totalNumber) / stopwatch.Elapsed.TotalSeconds)));
-    
-            batchEventProcessor.halt();
-            
-      
+            System.Console.WriteLine("[Test1P1CBatch] Consumer is done processing Events! Total Time in milliseconds:" + stopwatch.Elapsed.TotalMilliseconds + " " + String.Format("{0:###,###,###,###}op/sec", (totalNumber / stopwatch.Elapsed.TotalSeconds)));
+
+            disruptor.shutdown();
             System.Console.WriteLine("============================");
- 
+
 
         }
+        public static void Test3P1CBatch()
+        {
+            RingBuffer<TestEvent> ringBuffer = RingBuffer<TestEvent>.createMultiProducer(new TestEventFactory(), 1024 * 64, new WaitStrategies.BusySpinWaitStrategy());
+            Int32 batchSize = 10;
+           
+            Int32 numberOfThreads = 3;
+            Int64 iterations = 1000L * 1000L *200L;
+            Int64 expectedCount = iterations * numberOfThreads;
+            
+            System.Console.WriteLine("Starting Test3P1CBatch **Batch** Test with " + String.Format("{0:###,###,###,###} entries", expectedCount));
+
+            TestConsumer handler = new TestConsumer("TestBatchMultiProducer");
+            ISequenceBarrier sBarrier = ringBuffer.newBarrier();
+            BatchEventProcessor<TestEvent> batchEventProcessor = new BatchEventProcessor<TestEvent>(ringBuffer, sBarrier, handler);
+            ringBuffer.addGatingSequences(batchEventProcessor.getSequence());
+            System.Diagnostics.Stopwatch stopwatch = new Stopwatch();
+            stopwatch.Start();
+            for (Int32 x = 0;x < numberOfThreads; x++)
+            {
+                Int32 tempthreadId = x;
+                Task.Factory.StartNew(() =>
+                {
+                    for (long i = 0; i < iterations; i++)
+                    {
+                        var hi = ringBuffer.next(batchSize);
+                        var low = hi - batchSize + 1;
+
+                        for (long l = low; l <= hi; l++)
+                        {
+                            var entry = ringBuffer.get(l);
+                            entry.value = 1;
+                            
+                        }
+                        ringBuffer.publish(low,hi);
+                        i += batchSize - 1; //-1 as the iteration will increment
+                        
+                    }
+                });
+
+            }
+            Task.Factory.StartNew(() =>
+                {
+                    batchEventProcessor.run();
+                });
+         
+            while (batchEventProcessor.getSequence().get() != (expectedCount-1))
+            {
+                Thread.Sleep(1);
+            }
+            stopwatch.Stop();
+            System.Console.WriteLine("[Test3P1CBatch] Consumer is done processing Events! Total Time in milliseconds:" + stopwatch.Elapsed.TotalMilliseconds + " " + String.Format("{0:###,###,###,###}op/sec", ((expectedCount) / stopwatch.Elapsed.TotalSeconds)));
+
+            batchEventProcessor.halt();
+
+
+            System.Console.WriteLine("============================");
+
+          
+        }
+     
         public static void FizzBuzz1P3CBlockingCollection()
         {
             System.Console.WriteLine("============================");
@@ -216,13 +286,16 @@ namespace Disruptor_Net3.Console
         public static void TestMultiThreading()
         {
             System.Console.WriteLine("============================");
- 
-            Int32 numberOfThreads = 3;
-            Int32 totalNumber = 30000000;
+
+            Int32 batchSize = 1;
+            Int32 currentBatchSize = batchSize;
+
+            Int32 numberOfThreads = 1;
+            Int32 totalNumber = batchSize * 10000000*numberOfThreads; ;
             Int32 numberPerThread = totalNumber / numberOfThreads;
              System.Console.WriteLine("Starting TestMultiThreading Test with " + String.Format("{0:###,###,###,###} entries", totalNumber) + " and with " + numberOfThreads + " threads");
          
-            dsl.Disruptor<TestEvent> disruptor = new dsl.Disruptor<TestEvent>(new TestEventFactory(), 1024, dsl.ProducerType.MULTI, new Disruptor_Net3.WaitStrategies.BusySpinWaitStrategy());
+            dsl.Disruptor<TestEvent> disruptor = new dsl.Disruptor<TestEvent>(new TestEventFactory(), 2048*2, dsl.ProducerType.MULTI, new Disruptor_Net3.WaitStrategies.BusySpinWaitStrategy());
             TestConsumer handler = new TestConsumer("TestMultiThreading");
             disruptor.handleEventsWith(handler);
             disruptor.start();
@@ -230,21 +303,33 @@ namespace Disruptor_Net3.Console
             RingBuffer<TestEvent> ringBuffer = disruptor.getRingBuffer();
             System.Diagnostics.Stopwatch stopwatch = new Stopwatch();
             stopwatch.Start();
+          
+
             for(Int32 i = 0;i<numberOfThreads;i++)
             {
                 Task.Factory.StartNew(() => {
 
-                    PaddedLong currentCounter = new PaddedLong();
-                    currentCounter.value = 1;
+                    Random rand = new Random();
 
-                    while(currentCounter.value<=numberPerThread)
+                    Int64 currentCounter = 1;
+
+                   
+                    while(currentCounter<=numberPerThread)
                     {
-                        long sequence = ringBuffer.next();
-                        TestEvent tEvent = ringBuffer.get(sequence);
-                        tEvent.value = i;
-                        ringBuffer.publish(sequence);
+                       
+                        Int64 sequence = ringBuffer.next(currentBatchSize);
+                        Int64 indexLocation=0;
+                        for (Int32 x = 0; x < currentBatchSize; x++)
+                        {
+                            indexLocation = sequence - (currentBatchSize-1) + x;
+                            TestEvent tEvent = ringBuffer.get(indexLocation);
+                            tEvent.value = i;
+                            ringBuffer.publish(indexLocation);
 
-                        currentCounter.value++;
+                        }
+                        //ringBuffer.publish(sequence);
+
+                        currentCounter += currentBatchSize;
                     }
                 });
 
@@ -262,17 +347,17 @@ namespace Disruptor_Net3.Console
  
         }
         //about 94,795,715 ops per second on a i72600k
-        public static void TestSingleThreading()
+        public static void Test1P1C()
         {
             System.Console.WriteLine("============================");
 
            Int32 totalNumber = 1000000000;
-            System.Console.WriteLine("Starting TestSingleThreading Test with " + String.Format("{0:###,###,###,###} entries", totalNumber) + " and a single thread");
+            System.Console.WriteLine("Starting Test1P1C Test with " + String.Format("{0:###,###,###,###} entries", totalNumber) + " and a single thread");
          
          
             ManualResetEventSlim resetEvent = new ManualResetEventSlim(false);
         
-            dsl.Disruptor<TestEvent> disruptor = new dsl.Disruptor<TestEvent>(new TestEventFactory(), 1024, dsl.ProducerType.SINGLE, new Disruptor_Net3.WaitStrategies.BusySpinWaitStrategy());
+            Disruptor<TestEvent> disruptor = new dsl.Disruptor<TestEvent>(new TestEventFactory(), 1024,ProducerType.SINGLE, new WaitStrategies.BusySpinWaitStrategy());
             TestConsumer handler = new TestConsumer("TestSingleThreading");
             disruptor.handleEventsWith(handler);
             disruptor.start();
