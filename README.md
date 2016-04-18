@@ -24,6 +24,7 @@ Single consumer, single producer, but not using batch. <br/>
 This tends to fluxuate a bit.<br/>
 <br/>
 1,000,000,000 entries<br/>
+
 | Time(ms)        | ops/sec           | 
 |:------------- |-------------:| 
 | 13833.3955      |72,288,832 | 
@@ -34,6 +35,7 @@ This tends to fluxuate a bit.<br/>
 Three Producer, single consumer , using batch.<br/>
 <br/>
 600,000,000 entries<br/>
+
 | Time(ms)        | ops/sec           | 
 |:------------- |-------------:| 
 | 7138.7307      |84,048,555 | 
@@ -45,6 +47,7 @@ Three Producer, single consumer , using batch.<br/>
 Three Producer, single consumer , *NOT* using batch.<br/>
 <br/>
 90,000,000 entries
+
 | Time(ms)        | ops/sec           | 
 |:------------- |-------------:| 
 | 7109.6871      |12,658,785 | 
