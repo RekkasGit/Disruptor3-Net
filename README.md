@@ -12,36 +12,47 @@ Performance numbers, as they always are what people are looking for.
 Single producer single consumer using batch.
 <br/><br>
 1,000,000,000 entries<br/>
-milliseconds:6124.9933		163,265,485op/sec<br/>
-milliseconds:6057.9575		165,072,139op/sec<br/>
-milliseconds:6134.7049		163,007,026op/sec<br/>
-milliseconds:6134.8383		163,003,481op/sec<br/>
+
+| Time(ms)        | ops/sec           | 
+|:------------- |-------------:| 
+| 6124.9933      | 163,265,485 | 
+| 6057.9575	     | 165,072,139      | 
+| 6134.7049 |163,007,026     | 
+| 6134.8383 | 163,003,481     | 
 <br/>
 Single consumer, single producer, but not using batch. <br/>
 This tends to fluxuate a bit.<br/>
 <br/>
 1,000,000,000 entries<br/>
-milliseconds:13833.3955		72,288,832 op/sec<br/>
-milliseconds:10664.2537		93,771,213 op/sec<br/>
-milliseconds:12565.4032		79,583,598 op/sec<br/>
-milliseconds:10404.4818		96,112,427 op/sec<br/>
+| Time(ms)        | ops/sec           | 
+|:------------- |-------------:| 
+| 13833.3955      |72,288,832 | 
+| 10664.2537     | 93,771,213      | 
+|12565.4032	 |79,583,598     | 
+|10404.4818 | 96,112,427     | 
 <br/>
 Three Producer, single consumer , using batch.<br/>
 <br/>
 600,000,000 entries<br/>
-milliseconds:7138.7307		84,048,555 op/sec<br/>
-milliseconds:7259.6242		82,648,906 op/sec<br/>
-milliseconds:7123.6162		84,226,885 op/sec<br/>
-milliseconds:7223.8552		83,058,143 op/sec<br/>
+| Time(ms)        | ops/sec           | 
+|:------------- |-------------:| 
+| 7138.7307      |84,048,555 | 
+| 7259.6242    | 82,648,906      | 
+|7123.6162	 |84,226,885     | 
+|7223.8552 | 83,058,143    | 
+
 <br/>
 Three Producer, single consumer , *NOT* using batch.<br/>
 <br/>
 90,000,000 entries
-milliseconds:7109.6871		12,658,785 op/sec<br/>
-milliseconds:7071.3333		12,727,444 op/sec<br/>
-milliseconds:7466.917		12,053,167 op/sec<br/>
-milliseconds:8295.9761		10,848,633 op/sec<br/>
+| Time(ms)        | ops/sec           | 
+|:------------- |-------------:| 
+| 7109.6871      |12,658,785 | 
+| 7071.3333    |12,727,444      | 
+|7466.917		 |12,053,167     | 
+|8295.9761 | 10,848,633    | 
 <br/>
+
 Round numbers from a colleague's performance test program<br/>
 
 Concurrent Queue 1P1C		28-33 million op/sec<br/> 
