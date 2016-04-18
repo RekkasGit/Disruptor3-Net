@@ -1,7 +1,7 @@
 # Disruptor3-Net
 Disruptor converted over for .net usage.
 Was a big fan of the Java version, and tried to use the .net version. Had issues and looked like the project was abandoned.
-So I took two days (over christmas holidays 2015) and converted the current version (3.3.8) over to .net. 
+So I took two days (over Christmas holidays 2015) and converted the current version (3.3.8) over to .net. 
 
 This is an initial development state, though seems to work well. 
 
@@ -85,13 +85,13 @@ Starting TestMulti3P1C Test with 90,000,000 entries
 
 Round numbers from a colleague's performance test program
 
-ConcurrentQueue 1P1C, 28-33 million. 
-ConcurrentQUeue 2P1C, 14-17 million
-ConcurrentQueue 3P1C, 13-16 million.
+Concurrent Queue 1P1C, 28-33 million. 
+Concurrent Queue 2P1C, 14-17 million
+Concurrent Queue 3P1C, 13-16 million.
 
 Blocking Collection 1P1C 5 million
-Blocking Collection 2P1C 4.8 milion
-BlockingC Collection 3P1C 4.5 million
+Blocking Collection 2P1C 4.8 million
+Blocking Collection 3P1C 4.5 million
 
 
 BufferBlock (with spinwait) 1P1C 15 million
@@ -104,6 +104,8 @@ BufferBlock with link 3P1C 5.7 million
 
 
 Example usage.
+
+**NOTE**! for performance numbers, be sure to have the application in release/64bit mode (on the console turn off perfer 32bit)
 
 ```
 //First we define the Disruptor
@@ -208,6 +210,7 @@ _isruptor.handleEventsWith(_fizzEventHandler, _buzzEventHandler).then(_fizzBuzzE
 
 
 ```
+
 
 
 
