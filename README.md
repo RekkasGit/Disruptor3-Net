@@ -7,93 +7,67 @@ This is an initial development state, though seems to work well.
 
 
 Performance numbers, as they always are what people are looking for.
+<br/>
 
 Single producer single consumer using batch.
-
-1,000,000,000 entries
-Total Time in milliseconds:6124.9933 163,265,485op/sec
-
-1,000,000,000 entries
-Total Time in milliseconds:6057.9575 165,072,139op/sec
-
-1,000,000,000 entries
-Total Time in milliseconds:6134.7049 163,007,026op/sec
-
-1,000,000,000 entries
-Total Time in milliseconds:6134.8383 163,003,481op/sec
-
-
-Single consumer, single producer, but not using batch. This tends to fluxuate a bit.
-
-1,000,000,000 entries
-Total Time in milliseconds:13833.3955 72,288,832op/sec
-
-1,000,000,000 entries
-Total Time in milliseconds:10664.2537 93,771,213op/sec
-
-1,000,000,000 entries
-Total Time in milliseconds:12565.4032 79,583,598op/sec
-
-1,000,000,000 entries
-Total Time in milliseconds:10404.4818 96,112,427op/sec
-
-
-
-Three Producer, single consumer , using batch.
-
-600,000,000 entries
-Total Time in milliseconds:7138.7307 84,048,555op/sec
-
-600,000,000 entries
-Total Time in milliseconds:7259.6242 82,648,906op/sec
-
-600,000,000 entries
-Total Time in milliseconds:7123.6162 84,226,885op/sec
-
-600,000,000 entries
-Total Time in milliseconds:7223.8552 83,058,143op/sec
-
-
-
-Three Producer, single consumer , *NOT* using batch.
-
+<br/>
+1,000,000,000 entries<br/>
+Total Time in milliseconds:6124.9933 163,265,485op/sec<br/>
+Total Time in milliseconds:6057.9575 165,072,139op/sec<br/>
+Total Time in milliseconds:6134.7049 163,007,026op/sec<br/>
+Total Time in milliseconds:6134.8383 163,003,481op/sec<br/>
+<br/>
+<br/>
+Single consumer, single producer, but not using batch. This tends to fluxuate a bit.<br/>
+<br/>
+1,000,000,000 entries<br/>
+Total Time in milliseconds:13833.3955 72,288,832op/sec<br/>
+Total Time in milliseconds:10664.2537 93,771,213op/sec<br/>
+Total Time in milliseconds:12565.4032 79,583,598op/sec<br/>
+Total Time in milliseconds:10404.4818 96,112,427op/sec<br/>
+<br/>
+<br/>
+Three Producer, single consumer , using batch.<br/>
+<br/>
+600,000,000 entries<br/>
+Total Time in milliseconds:7138.7307 84,048,555op/sec<br/>
+Total Time in milliseconds:7259.6242 82,648,906op/sec<br/>
+Total Time in milliseconds:7123.6162 84,226,885op/sec<br/>
+Total Time in milliseconds:7223.8552 83,058,143op/sec<br/>
+<br/>
+<br/>
+Three Producer, single consumer , *NOT* using batch.<br/>
+<br/>
 90,000,000 entries
-Total Time in milliseconds:7109.6871 12,658,785op/sec
-
-90,000,000 entries
-Total Time in milliseconds:7071.3333 12,727,444op/sec
-
-90,000,000 entries
-Total Time in milliseconds:7466.917 12,053,167op/sec
-
-90,000,000 entries
-Total Time in milliseconds:8295.9761 10,848,633op/sec
+Total Time in milliseconds:7109.6871 12,658,785op/sec<br/>
+Total Time in milliseconds:7071.3333 12,727,444op/sec<br/>
+Total Time in milliseconds:7466.917 12,053,167op/sec<br/>
+Total Time in milliseconds:8295.9761 10,848,633op/sec<br/>
 
 
-Round numbers from a colleague's performance test program
+Round numbers from a colleague's performance test program<br/>
 
-Concurrent Queue 1P1C, 28-33 million. 
-Concurrent Queue 2P1C, 14-17 million
-Concurrent Queue 3P1C, 13-16 million.
-
-Blocking Collection 1P1C 5 million
-Blocking Collection 2P1C 4.8 million
-Blocking Collection 3P1C 4.5 million
-
-
-BufferBlock (with spinwait) 1P1C 15 million
-BufferBlock (with spinwait) 2P1C 15 million
-BufferBlock (with spinwait) 3P1C 13 million
-
-BufferBlock with link  1P1C 5.8 million
-BufferBlock with link 2P1C 6.1 million
-BufferBlock with link 3P1C 5.7 million
-
-
+Concurrent Queue 1P1C, 28-33 million<br/> 
+Concurrent Queue 2P1C, 14-17 million<br/>
+Concurrent Queue 3P1C, 13-16 million<br/>
+<br/><br/>
+Blocking Collection 1P1C 5.0 million<br/>
+Blocking Collection 2P1C 4.8 million<br/>
+Blocking Collection 3P1C 4.5 million<br/>
+<br/><br/>
+BufferBlock (with spinwait) 1P1C 15 million<br/>
+BufferBlock (with spinwait) 2P1C 15 million<br/>
+BufferBlock (with spinwait) 3P1C 13 million<br/>
+<br/><br/>
+BufferBlock with link 1P1C 5.8 million<br/>
+BufferBlock with link 2P1C 6.1 million<br/>
+BufferBlock with link 3P1C 5.7 million<br/>
+<br/>
+<br/>
 Example usage.
-
+<br/>
 **NOTE**! for performance numbers, be sure to have the application in release/64bit mode (on the console turn off perfer 32bit)
-
+<br/>
 ```
 //First we define the Disruptor
 //In this case we only have a single producer and a single consumer. This allows us to use the Single mode. Far faster than the Multi.
