@@ -1,16 +1,16 @@
 # Disruptor3-Net
-Disruptor converted over for .net usage.
-Was a big fan of the Java version, and tried to use the .net version. Had issues and looked like the project was abandoned.
-So I took two days (over Christmas holidays 2015) and converted the current version (3.3.8) over to .net. 
+Disruptor 3.3.8 converted over for .net usage.
 
-This is an initial development state, though seems to work well. 
+Was a big fan of the Java version, and tried to use the .net version. Unfortunatly I encountered issues where it could stall and looked like the project was abandoned.
+I took two days (over Christmas holidays 2015) and converted the then current version (3.3.8) over to .net. 
 
+This is an initial development state, though seems to work well. (it is currently used in production environments without problem)
 
-Performance numbers, as they always are what people are looking for.
+Performance numbers
 <br/>
 
 Single producer single consumer using batch.
-<br/><br>
+<br/>
 1,000,000,000 entries<br/>
 
 | Time(ms)        | ops/sec           | 
@@ -31,8 +31,8 @@ This tends to fluxuate a bit.<br/>
 | 10664.2537     | 93,771,213      | 
 |12565.4032	 |79,583,598     | 
 |10404.4818 | 96,112,427     | 
-<br/>
-Three Producer, single consumer , using batch.<br/>
+
+Three producer, single consumer , using batch.<br/>
 <br/>
 600,000,000 entries<br/>
 
@@ -43,8 +43,7 @@ Three Producer, single consumer , using batch.<br/>
 |7123.6162	 |84,226,885     | 
 |7223.8552 | 83,058,143    | 
 
-<br/>
-Three Producer, single consumer , *NOT* using batch.<br/>
+Three producer, single consumer , *NOT* using batch.<br/>
 <br/>
 90,000,000 entries
 
@@ -177,7 +176,7 @@ ringBuffer.publish(low,hi);
 
 
 //You can also chain consumers like thus
-_isruptor.handleEventsWith(_fizzEventHandler, _buzzEventHandler).then(_fizzBuzzEventHandler);
+disruptor.handleEventsWith(_fizzEventHandler, _buzzEventHandler).then(_fizzBuzzEventHandler);
 //what this means is fizz/buzz will get the event, each on a seperate thread at the same time. After both of these have been processed, _fizzBuzzEventHandler will then process on its own thread.   
 
 
