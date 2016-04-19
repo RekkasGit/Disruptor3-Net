@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Disruptor_Net3.Interfaces
+namespace Disruptor3_Net.Interfaces
 {
     /**
       * Implement this interface in your {@link EventHandler} to be notified when a thread for the

@@ -1,12 +1,12 @@
-﻿using Disruptor_Net3.Interfaces;
-using Disruptor_Net3.Exceptions;
+﻿using Disruptor3_Net.Interfaces;
+using Disruptor3_Net.Exceptions;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Threading;
-namespace Disruptor_Net3.dsl
+namespace Disruptor3_Net.dsl
 {
    /**
  * A DSL-style API for setting up the disruptor pattern around a ring buffer
@@ -295,7 +295,7 @@ namespace Disruptor_Net3.dsl
             {
                 shutdown(-1);
             }
-            catch (Disruptor_Net3.Exceptions.TimeoutException e)
+            catch (Disruptor3_Net.Exceptions.TimeoutException e)
             {
                 exceptionHandler.handleOnShutdownException(e);
             }
@@ -318,7 +318,7 @@ namespace Disruptor_Net3.dsl
             {
                 if (timeout >= 0 &&  System.DateTime.UtcNow.Millisecond > timeOutAt)
                 {
-                    throw Disruptor_Net3.Exceptions.TimeoutException.INSTANCE;
+                    throw Disruptor3_Net.Exceptions.TimeoutException.INSTANCE;
                 }
                 System.Threading.Thread.Sleep(1);
                 // Busy spin <= Why?

@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Disruptor_Net3.Exceptions
+namespace Disruptor3_Net.Exceptions
 {
     /// <summary>
     /// Used to alert <see cref="IEventProcessor"/>s waiting at a <see cref="ISequenceBarrier"/> of status changes.

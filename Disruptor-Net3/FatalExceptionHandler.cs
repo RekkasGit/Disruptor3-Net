@@ -1,11 +1,11 @@
-﻿using Disruptor_Net3.Interfaces;
+﻿using Disruptor3_Net.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Disruptor_Net3
+namespace Disruptor3_Net
 {
     /* Convenience implementation of an exception handler that using standard JDK logging to log
      * the exception as {@link Level}.SEVERE and re-throw it wrapped in a {@link RuntimeException}

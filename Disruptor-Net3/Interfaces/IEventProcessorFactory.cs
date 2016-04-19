@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Disruptor_Net3.Interfaces
+namespace Disruptor3_Net.Interfaces
 {
     /**
       * A factory interface to make it possible to include custom event processors in a chain:

@@ -1,5 +1,5 @@
-﻿using Disruptor_Net3.Exceptions;
-using Disruptor_Net3.Interfaces;
+﻿using Disruptor3_Net.Exceptions;
+using Disruptor3_Net.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,7 +8,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Disruptor_Net3.Sequencers
+namespace Disruptor3_Net.Sequencers
 {
 
 

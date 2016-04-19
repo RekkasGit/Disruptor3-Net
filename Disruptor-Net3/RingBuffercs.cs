@@ -1,8 +1,8 @@
-﻿using Disruptor_Net3.dsl;
-using Disruptor_Net3.Exceptions;
-using Disruptor_Net3.Interfaces;
-using Disruptor_Net3.Sequencers;
-using Disruptor_Net3.WaitStrategies;
+﻿using Disruptor3_Net.dsl;
+using Disruptor3_Net.Exceptions;
+using Disruptor3_Net.Interfaces;
+using Disruptor3_Net.Sequencers;
+using Disruptor3_Net.WaitStrategies;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,7 +10,7 @@ using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Disruptor_Net3
+namespace Disruptor3_Net
 {
     
     [StructLayout(LayoutKind.Sequential)]

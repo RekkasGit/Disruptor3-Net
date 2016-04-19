@@ -1,4 +1,4 @@
-﻿using Disruptor_Net3.Interfaces;
+﻿using Disruptor3_Net.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -6,7 +6,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Disruptor_Net3.WaitStrategies
+namespace Disruptor3_Net.WaitStrategies
 {
     /**
      * Blocking strategy that uses a lock and condition variable for {@link EventProcessor}s waiting on a barrier.

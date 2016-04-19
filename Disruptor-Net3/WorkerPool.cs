@@ -1,5 +1,5 @@
-﻿using Disruptor_Net3.Interfaces;
-using Disruptor_Net3.WaitStrategies;
+﻿using Disruptor3_Net.Interfaces;
+using Disruptor3_Net.WaitStrategies;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,7 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Threading;
 
-namespace Disruptor_Net3
+namespace Disruptor3_Net
 {
    /**
      * WorkerPool contains a pool of {@link WorkProcessor}s that will consume sequences so jobs can be farmed out across a pool of workers.

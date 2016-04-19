@@ -1,4 +1,4 @@
-﻿using Disruptor_Net3.Interfaces;
+﻿using Disruptor3_Net.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -6,7 +6,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Disruptor_Net3.WaitStrategies
+namespace Disruptor3_Net.WaitStrategies
 {
     /**
      * Yielding strategy that uses a Thread.yield() for {@link com.lmax.disruptor.EventProcessor}s waiting on a barrier

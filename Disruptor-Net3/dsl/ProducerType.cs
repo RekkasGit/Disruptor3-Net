@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Disruptor_Net3.dsl
+namespace Disruptor3_Net.dsl
 {
     /**
      * Defines producer types to support creation of RingBuffer with correct sequencer and publisher.

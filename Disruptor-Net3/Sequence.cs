@@ -7,7 +7,7 @@ using System.Threading;
 using System.Runtime.InteropServices;
 using System.Runtime.CompilerServices;
 
-namespace Disruptor_Net3
+namespace Disruptor3_Net
 {
 
   

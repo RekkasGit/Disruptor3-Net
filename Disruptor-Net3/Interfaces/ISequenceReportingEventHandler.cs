@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Disruptor_Net3.Interfaces
+namespace Disruptor3_Net.Interfaces
 {
     /**
      * Used by the {@link BatchEventProcessor} to set a callback allowing the {@link EventHandler} to notify

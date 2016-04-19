@@ -1,13 +1,13 @@
-﻿using Disruptor_Net3.Interfaces;
+﻿using Disruptor3_Net.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Threading;
-using Disruptor_Net3.Exceptions;
+using Disruptor3_Net.Exceptions;
 
-namespace Disruptor_Net3
+namespace Disruptor3_Net
 {
    /**
      * Convenience class for handling the batching semantics of consuming entries from a {@link RingBuffer}
@@ -122,7 +122,7 @@ namespace Disruptor_Net3
 
                         sequence.set(availableSequence);
                     }
-                    catch (Disruptor_Net3.Exceptions.TimeoutException)
+                    catch (Disruptor3_Net.Exceptions.TimeoutException)
                     {
                         notifyTimeout(sequence.get());
                     }

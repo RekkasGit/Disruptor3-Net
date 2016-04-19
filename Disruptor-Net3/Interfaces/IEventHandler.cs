@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Disruptor_Net3.Interfaces
+namespace Disruptor3_Net.Interfaces
 {
     /**
      * Callback interface to be implemented for processing events as they become available in the {@link RingBuffer}

@@ -3,11 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Disruptor_Net3.Util;
+using Disruptor3_Net.Util;
 using System.Runtime.CompilerServices;
-using Disruptor_Net3.Interfaces;
+using Disruptor3_Net.Interfaces;
 
-namespace Disruptor_Net3
+namespace Disruptor3_Net
 {
    /**
  * A {@link Sequence} group that can dynamically have {@link Sequence}s added and removed while being

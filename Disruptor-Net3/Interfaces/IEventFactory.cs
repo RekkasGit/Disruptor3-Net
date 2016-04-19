@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Disruptor_Net3.Interfaces
+namespace Disruptor3_Net.Interfaces
 {
     /**
      * Called by the {@link RingBuffer} to pre-populate all the events to fill the RingBuffer.

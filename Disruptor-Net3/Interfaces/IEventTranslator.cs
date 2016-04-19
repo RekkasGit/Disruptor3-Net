@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Disruptor_Net3.Interfaces
+namespace Disruptor3_Net.Interfaces
 {
       /**
      * <p>Implementations translate (write) data representations into events claimed from the {@link RingBuffer}.</p>
