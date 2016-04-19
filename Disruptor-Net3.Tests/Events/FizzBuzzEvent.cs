@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Disruptor_Net3.Tests.Events
+namespace Disruptor3_Net.Tests.Events
 {
     public sealed class FizzBuzzEvent
     {

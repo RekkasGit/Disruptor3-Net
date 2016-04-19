@@ -3,15 +3,15 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Disruptor_Net3;
+using Disruptor3_Net;
 using System.Threading;
-using Disruptor_Net3.Console.Events;
-using Disruptor_Net3.Console.Factories;
+using Disruptor3_Net.Console.Events;
+using Disruptor3_Net.Console.Factories;
 using System.Diagnostics;
-using Disruptor_Net3.Interfaces;
-using Disruptor_Net3.dsl;
+using Disruptor3_Net.Interfaces;
+using Disruptor3_Net.dsl;
 
-namespace Disruptor_Net3.Console
+namespace Disruptor3_Net.Console
 {
     class Program
     {
@@ -26,9 +26,9 @@ namespace Disruptor_Net3.Console
 
             for(Int32 i = 0;i<4;i++)
             {
-                Test1P1CBatch();
-                Test3P1CBatch();
-                Test1P1C();
+                //Test1P1CBatch();
+                //Test3P1CBatch();
+                //Test1P1C();
                 TestMulti3P1C();
                
             }
@@ -49,7 +49,7 @@ namespace Disruptor_Net3.Console
 
             ManualResetEventSlim resetEvent = new ManualResetEventSlim(false);
 
-            dsl.Disruptor<TestEvent> disruptor = new dsl.Disruptor<TestEvent>(new TestEventFactory(), 1024 * 2, dsl.ProducerType.SINGLE, new Disruptor_Net3.WaitStrategies.BusySpinWaitStrategy());
+            dsl.Disruptor<TestEvent> disruptor = new dsl.Disruptor<TestEvent>(new TestEventFactory(), 1024 * 2, dsl.ProducerType.SINGLE, new Disruptor3_Net.WaitStrategies.BusySpinWaitStrategy());
             TestConsumer handler = new TestConsumer("TestSingleThreading");
             disruptor.handleEventsWith(handler);
             disruptor.start();
@@ -169,7 +169,7 @@ namespace Disruptor_Net3.Console
             System.Console.WriteLine("============================");
             System.Console.WriteLine("Starting FizzBuzz1P3CBlockingCollection Test");
 
-            Disruptor_Net3.Tests.FizzBuzz1P3CBlockingCollectionPerfTest test = new Tests.FizzBuzz1P3CBlockingCollectionPerfTest();
+            Disruptor3_Net.Tests.FizzBuzz1P3CBlockingCollectionPerfTest test = new Tests.FizzBuzz1P3CBlockingCollectionPerfTest();
             test.RunPass();
             System.Console.WriteLine("============================");
          
@@ -179,7 +179,7 @@ namespace Disruptor_Net3.Console
             System.Console.WriteLine("============================");
             System.Console.WriteLine("Starting FizzBuzz1P3C Test");
           
-            Disruptor_Net3.Tests.FizzBuzz1P3C test = new Tests.FizzBuzz1P3C();
+            Disruptor3_Net.Tests.FizzBuzz1P3C test = new Tests.FizzBuzz1P3C();
          
             test.FizzBuzz1P3CDisruptorPerfTest();
             System.Console.WriteLine("============================");
@@ -193,9 +193,9 @@ namespace Disruptor_Net3.Console
             System.Console.WriteLine("============================");
             System.Console.WriteLine("Starting TestMulti3P1C Test with "+String.Format("{0:###,###,###,###} entries",totalNumber));
            
-            dsl.Disruptor<Test3P1CEvent> disruptor = new dsl.Disruptor<Test3P1CEvent>(new Test3P1CEventFactory(), 1024, dsl.ProducerType.MULTI, new Disruptor_Net3.WaitStrategies.BlockingWaitStrategy());
+            dsl.Disruptor<Test3P1CEvent> disruptor = new dsl.Disruptor<Test3P1CEvent>(new Test3P1CEventFactory(), 2048, dsl.ProducerType.MULTI, new Disruptor3_Net.WaitStrategies.BusySpinWaitStrategy());
             TestXP1CConsumer handler = new TestXP1CConsumer("TestMulti3P1C");
-             disruptor.handleEventsWith(handler);
+            disruptor.handleEventsWith(handler);
             disruptor.start();
 
             RingBuffer<Test3P1CEvent> ringBuffer = disruptor.getRingBuffer();
@@ -207,16 +207,16 @@ namespace Disruptor_Net3.Console
                 Task.Factory.StartNew(() =>
                 {
                     Int32 currentThreadId = tempthreadId;
-                    PaddedLong currentCounter = new PaddedLong();
-                    currentCounter.value= 1;
+                    Int64 currentCounter = 0;
+                    currentCounter= 1;
 
-                    while (currentCounter.value <= totalPerThread)
+                    while (currentCounter <= totalPerThread)
                     {
                         long sequence = ringBuffer.next();
                         Test3P1CEvent tEvent = ringBuffer.get(sequence);
-                        tEvent.currentCounter = currentCounter.value;
+                        tEvent.currentCounter = currentCounter;
                         ringBuffer.publish(sequence);
-                        currentCounter.value++;
+                        currentCounter++;
                     }
                 });
 
@@ -242,7 +242,7 @@ namespace Disruptor_Net3.Console
             Int32 numberPerThread = totalNumber / numberOfThreads;
 
             System.Console.WriteLine("Starting TestMultiIncrementSequence Test with " + String.Format("{0:###,###,###,###} entries", totalNumber) + " and with "+numberOfThreads + " threads");
-           dsl.Disruptor<TestEvent> disruptor = new dsl.Disruptor<TestEvent>(new TestEventFactory(), 1024, dsl.ProducerType.MULTI, new Disruptor_Net3.WaitStrategies.BusySpinWaitStrategy());
+           dsl.Disruptor<TestEvent> disruptor = new dsl.Disruptor<TestEvent>(new TestEventFactory(), 1024, dsl.ProducerType.MULTI, new Disruptor3_Net.WaitStrategies.BusySpinWaitStrategy());
             TestConsumers.TestMultiThreadedSequence handler = new TestConsumers.TestMultiThreadedSequence("TestMultiIncrementSequence");
             disruptor.handleEventsWith(handler);
             disruptor.start();
@@ -295,7 +295,7 @@ namespace Disruptor_Net3.Console
             Int32 numberPerThread = totalNumber / numberOfThreads;
              System.Console.WriteLine("Starting TestMultiThreading Test with " + String.Format("{0:###,###,###,###} entries", totalNumber) + " and with " + numberOfThreads + " threads");
          
-            dsl.Disruptor<TestEvent> disruptor = new dsl.Disruptor<TestEvent>(new TestEventFactory(), 2048*2, dsl.ProducerType.MULTI, new Disruptor_Net3.WaitStrategies.BusySpinWaitStrategy());
+            dsl.Disruptor<TestEvent> disruptor = new dsl.Disruptor<TestEvent>(new TestEventFactory(), 2048*2, dsl.ProducerType.MULTI, new Disruptor3_Net.WaitStrategies.BusySpinWaitStrategy());
             TestConsumer handler = new TestConsumer("TestMultiThreading");
             disruptor.handleEventsWith(handler);
             disruptor.start();

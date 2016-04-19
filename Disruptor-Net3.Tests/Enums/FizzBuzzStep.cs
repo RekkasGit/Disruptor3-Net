@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Disruptor_Net3.Tests.Enums
+namespace Disruptor3_Net.Tests.Enums
 {
     public enum FizzBuzzStep
     {

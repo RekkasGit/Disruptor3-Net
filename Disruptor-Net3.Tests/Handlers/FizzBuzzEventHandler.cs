@@ -1,6 +1,6 @@
-﻿using Disruptor_Net3.Interfaces;
-using Disruptor_Net3.Tests.Enums;
-using Disruptor_Net3.Tests.Events;
+﻿using Disruptor3_Net.Interfaces;
+using Disruptor3_Net.Tests.Enums;
+using Disruptor3_Net.Tests.Events;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,7 +8,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Disruptor_Net3.Tests.Handlers
+namespace Disruptor3_Net.Tests.Handlers
 {
     public class FizzBuzzEventHandler : IEventHandler<FizzBuzzEvent>
     {

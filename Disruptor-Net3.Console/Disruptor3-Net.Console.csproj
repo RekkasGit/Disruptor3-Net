@@ -7,8 +7,8 @@
     <ProjectGuid>{9FB2B31C-61CC-417F-810B-F3D8BB49A89F}</ProjectGuid>
     <OutputType>Exe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Disruptor_Net3.Console</RootNamespace>
-    <AssemblyName>Disruptor-Net3.Console</AssemblyName>
+    <RootNamespace>Disruptor3_Net.Console</RootNamespace>
+    <AssemblyName>Disruptor3-Net.Console</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>

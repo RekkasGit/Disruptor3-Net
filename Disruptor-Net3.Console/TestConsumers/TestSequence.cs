@@ -5,9 +5,9 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Disruptor_Net3.Console.TestConsumers
+namespace Disruptor3_Net.Console.TestConsumers
 {
-    public class TestMultiThreadedSequence : Disruptor_Net3.Interfaces.IEventHandler<TestEvent>
+    public class TestMultiThreadedSequence : Disruptor3_Net.Interfaces.IEventHandler<TestEvent>
     {
        System.Diagnostics.Stopwatch stopwatch = null;
 

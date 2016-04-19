@@ -5,9 +5,9 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Disruptor_Net3.Console
+namespace Disruptor3_Net.Console
 {
-    public class TestConsumer : Disruptor_Net3.Interfaces.IEventHandler<TestEvent>
+    public class TestConsumer : Disruptor3_Net.Interfaces.IEventHandler<TestEvent>
     {
         
         //PaddedLong counter = new PaddedLong();

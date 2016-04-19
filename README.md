@@ -98,7 +98,7 @@ Disruptor<TestEvent> disruptor = new dsl.Disruptor<TestEvent>(new TestEventFacto
 */
 //We also have a Factory to create the Model
 /*
-public class TestEventFactory: Disruptor_Net3.Interfaces.IEventFactory<TestEvent>
+public class TestEventFactory: Disruptor3_Net.Interfaces.IEventFactory<TestEvent>
 {
     public TestEvent newInstance()
     {
@@ -116,7 +116,7 @@ public class TestEventFactory: Disruptor_Net3.Interfaces.IEventFactory<TestEvent
 
 TestConsumer handler = new TestConsumer("TestSingleThreading");
 /*
- public class TestConsumer : Disruptor_Net3.Interfaces.IEventHandler<TestEvent>
+ public class TestConsumer : Disruptor3_Net.Interfaces.IEventHandler<TestEvent>
 {
 
     string _name;

@@ -6,8 +6,8 @@
     <ProjectGuid>{6AE4286F-FBBF-468F-AA5B-77F54C38DC96}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Disruptor_Net3.Tests</RootNamespace>
-    <AssemblyName>Disruptor-Net3.Tests</AssemblyName>
+    <RootNamespace>Disruptor3_Net3.Tests</RootNamespace>
+    <AssemblyName>Disruptor3-Net.Tests</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{3AC096D0-A1C2-E12C-1390-A8335801FDAB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>

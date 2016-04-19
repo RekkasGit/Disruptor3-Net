@@ -7,8 +7,8 @@
     <ProjectGuid>{524AFACC-928D-421D-A9F0-1840B00D0F33}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Disruptor_Net3</RootNamespace>
-    <AssemblyName>Disruptor-Net3</AssemblyName>
+    <RootNamespace>Disruptor3_Net</RootNamespace>
+    <AssemblyName>Disruptor3-Net</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>

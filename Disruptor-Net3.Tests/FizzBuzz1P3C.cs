@@ -1,15 +1,15 @@
 ﻿using System;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Disruptor_Net3.Tests.Handlers;
-using Disruptor_Net3.Tests.Events;
+using Disruptor3_Net.Tests.Handlers;
+using Disruptor3_Net.Tests.Events;
 using System.Threading;
-using Disruptor_Net3.dsl;
-using Disruptor_Net3.Tests.Factories;
-using Disruptor_Net3.Tests.Enums;
+using Disruptor3_Net.dsl;
+using Disruptor3_Net.Tests.Factories;
+using Disruptor3_Net.Tests.Enums;
 using System.Diagnostics;
 using System.Collections.Concurrent;
 
-namespace Disruptor_Net3.Tests
+namespace Disruptor3_Net.Tests
 {
     [TestClass]
     public class FizzBuzz1P3C : AbstractFizzBuzz1P3CPerfTest

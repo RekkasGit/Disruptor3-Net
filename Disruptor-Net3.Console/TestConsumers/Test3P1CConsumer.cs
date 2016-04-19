@@ -1,4 +1,4 @@
-﻿using Disruptor_Net3.Console.Events;
+﻿using Disruptor3_Net.Console.Events;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -6,9 +6,9 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Disruptor_Net3.Console
+namespace Disruptor3_Net.Console
 {
-    class TestXP1CConsumer : Disruptor_Net3.Interfaces.IEventHandler<Test3P1CEvent>
+    class TestXP1CConsumer : Disruptor3_Net.Interfaces.IEventHandler<Test3P1CEvent>
     {
 
         string _name;
