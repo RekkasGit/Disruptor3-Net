@@ -6,7 +6,7 @@ I took two days (over Christmas holidays 2015) and converted the then current ve
 
 This is an initial development state, though seems to work well. (it is currently used in production environments without problem)
 
-Performance numbers
+Performance numbers (done on an i72600k at around 4ghz)
 <br/>
 
 Single producer single consumer using batch.
@@ -49,10 +49,10 @@ Three producer, single consumer , *NOT* using batch.<br/>
 
 | Time(ms)        | ops/sec           | 
 |:------------- |-------------:| 
-| 7109.6871      |12,658,785 | 
-| 7071.3333    |12,727,444      | 
-|7466.917		 |12,053,167     | 
-|8295.9761 | 10,848,633    | 
+| 6026.7175     |14,933,502 | 
+| 6869.5029    |13,101,385      | 
+|5848.7995		 |15,387,773     | 
+|5795.8661 | 15,528,309    | 
 <br/>
 
 Round numbers from a colleague's performance test program<br/>
@@ -98,7 +98,7 @@ Disruptor<TestEvent> disruptor = new dsl.Disruptor<TestEvent>(new TestEventFacto
 */
 //We also have a Factory to create the Model
 /*
-public class TestEventFactory: Disruptor3_Net.Interfaces.IEventFactory<TestEvent>
+public class TestEventFactory: Disruptor_Net3.Interfaces.IEventFactory<TestEvent>
 {
     public TestEvent newInstance()
     {
@@ -116,7 +116,7 @@ public class TestEventFactory: Disruptor3_Net.Interfaces.IEventFactory<TestEvent
 
 TestConsumer handler = new TestConsumer("TestSingleThreading");
 /*
- public class TestConsumer : Disruptor3_Net.Interfaces.IEventHandler<TestEvent>
+ public class TestConsumer : Disruptor_Net3.Interfaces.IEventHandler<TestEvent>
 {
 
     string _name;
@@ -158,8 +158,8 @@ ringBuffer.publish(sequence);
 /********IMPORTANT**************
 If you do a next, you *MUST* do a publish. Period.
 You can do a try/finally but there are some pretty heafty performance penalities on it
-try/catch is better performance.  Note, you can set the object to be skipped such as a boolean flag
-on the object itself to tell the event to be skipped.
+try/catch is better performance.  Note, if you need to skip the event you can set the object to be skipped such as a boolean flag
+on the object itself , but you must still publish it.
 */
 
 
