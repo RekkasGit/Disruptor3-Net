@@ -80,7 +80,8 @@ Example usage.
 <br/>
 ```c#
 //First we define the Disruptor
-//In this case we only have a single producer and a single consumer. This allows us to use the Single mode. Far faster than the Multi.
+//In this case we only have a single producer and a single consumer. This allows us to use the Single mode.
+//Far faster than the Multi.
 
 Int32 ringBufferSize = 1024;//Must be a power of 2.
 
@@ -109,7 +110,8 @@ public class TestEventFactory: Disruptor_Net3.Interfaces.IEventFactory<TestEvent
 
 //The wait strategy is depending on the amount of CPU cores you have available. In this case we want to burn a core for lower latencies higher throughput so we choose BusySpinWait
 //Generally you will use spin, yield or blocking.
-
+```
+```C#
 //So now we have our disruptor ready, but we need something to handle the events that will fire so we create one.
 
 TestConsumer handler = new TestConsumer("TestSingleThreading");
@@ -137,10 +139,10 @@ disruptor.handleEventsWith(handler);
 
 //Lets start the threads that do the processing, return value is the ring buffer.            
 disruptor.start();
-
+```
+```c#
 //we can also get the ring buffer by just asking the distruptor for it
 RingBuffer<TestEvent> ringBuffer = disruptor.getRingBuffer();
-
 
 //now that we have all the setup done, lets actually use it!
 
@@ -160,6 +162,9 @@ try/catch is better performance.  and you can set the object to be skipped such 
 on the object itself to tell the event to be skipped.
 */
 
+
+```
+```c#
 //if we wish to do a batch it would be more like this.
 
 var hi = ringBuffer.next(batchSize);
@@ -172,9 +177,8 @@ for (long l = low; l <= hi; l++)
                             
 }
 ringBuffer.publish(low,hi);
-
-
-
+```
+```c#
 //You can also chain consumers like thus
 disruptor.handleEventsWith(_fizzEventHandler, _buzzEventHandler).then(_fizzBuzzEventHandler);
 //what this means is fizz/buzz will get the event, each on a seperate thread at the same time. After both of these have been processed, _fizzBuzzEventHandler will then process on its own thread.   
