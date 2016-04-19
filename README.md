@@ -6,7 +6,7 @@ I took two days (over Christmas holidays 2015) and converted the then current ve
 
 This is an initial development state, though seems to work well. (it is currently used in production environments without problem)
 
-Performance numbers
+Performance numbers (done on an i72600k at around 4ghz)
 <br/>
 
 Single producer single consumer using batch.
@@ -49,10 +49,10 @@ Three producer, single consumer , *NOT* using batch.<br/>
 
 | Time(ms)        | ops/sec           | 
 |:------------- |-------------:| 
-| 7109.6871      |12,658,785 | 
-| 7071.3333    |12,727,444      | 
-|7466.917		 |12,053,167     | 
-|8295.9761 | 10,848,633    | 
+| 6026.7175     |14,933,502 | 
+| 6869.5029    |13,101,385      | 
+|5848.7995		 |15,387,773     | 
+|5795.8661 | 15,528,309    | 
 <br/>
 
 Round numbers from a colleague's performance test program<br/>
