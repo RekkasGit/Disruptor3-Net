@@ -58,9 +58,9 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Disruptor-Net3\Disruptor-Net3.csproj">
+    <ProjectReference Include="..\Disruptor-Net3\Disruptor3-Net.csproj">
       <Project>{524afacc-928d-421d-a9f0-1840b00d0f33}</Project>
-      <Name>Disruptor-Net3</Name>
+      <Name>Disruptor3-Net</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup />

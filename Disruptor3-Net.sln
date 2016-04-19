@@ -3,11 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
 VisualStudioVersion = 14.0.24720.0
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Disruptor-Net3", "Disruptor-Net3\Disruptor-Net3.csproj", "{524AFACC-928D-421D-A9F0-1840B00D0F33}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Disruptor3-Net", "Disruptor-Net3\Disruptor3-Net.csproj", "{524AFACC-928D-421D-A9F0-1840B00D0F33}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Disruptor-Net3.Console", "Disruptor-Net3.Console\Disruptor-Net3.Console.csproj", "{9FB2B31C-61CC-417F-810B-F3D8BB49A89F}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Disruptor3-Net.Console", "Disruptor-Net3.Console\Disruptor3-Net.Console.csproj", "{9FB2B31C-61CC-417F-810B-F3D8BB49A89F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Disruptor-Net3.Tests", "Disruptor-Net3.Tests\Disruptor-Net3.Tests.csproj", "{6AE4286F-FBBF-468F-AA5B-77F54C38DC96}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Disruptor3-Net.Tests", "Disruptor-Net3.Tests\Disruptor3-Net.Tests.csproj", "{6AE4286F-FBBF-468F-AA5B-77F54C38DC96}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{16AAD590-23F6-4DDF-BF72-E43FB1E14594}"
 	ProjectSection(SolutionItems) = preProject

@@ -158,7 +158,7 @@ ringBuffer.publish(sequence);
 /********IMPORTANT**************
 If you do a next, you *MUST* do a publish. Period.
 You can do a try/finally but there are some pretty heafty performance penalities on it
-try/catch is better performance.  and you can set the object to be skipped such as a boolean flag
+try/catch is better performance.  Note, you can set the object to be skipped such as a boolean flag
 on the object itself to tell the event to be skipped.
 */
 

@@ -59,13 +59,13 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Disruptor-Net3.Tests\Disruptor-Net3.Tests.csproj">
+    <ProjectReference Include="..\Disruptor-Net3.Tests\Disruptor3-Net.Tests.csproj">
       <Project>{6ae4286f-fbbf-468f-aa5b-77f54c38dc96}</Project>
-      <Name>Disruptor-Net3.Tests</Name>
+      <Name>Disruptor3-Net.Tests</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Disruptor-Net3\Disruptor-Net3.csproj">
+    <ProjectReference Include="..\Disruptor-Net3\Disruptor3-Net.csproj">
       <Project>{524afacc-928d-421d-a9f0-1840b00d0f33}</Project>
-      <Name>Disruptor-Net3</Name>
+      <Name>Disruptor3-Net</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
