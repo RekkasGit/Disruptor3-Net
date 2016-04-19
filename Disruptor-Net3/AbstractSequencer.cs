@@ -21,7 +21,7 @@ namespace Disruptor3_Net
         protected int bufferSize;
         protected IWaitStrategy waitStrategy;
         protected Sequence cursor = new Sequence(INITIAL_CURSOR_VALUE);
-        protected volatile Sequence[] gatingSequences = new Sequence[0];
+        protected Sequence[] gatingSequences = new Sequence[0];
 
         public abstract void claim(long sequence);
         public abstract bool isAvailable(long sequence);

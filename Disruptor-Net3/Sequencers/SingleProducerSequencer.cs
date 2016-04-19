@@ -14,7 +14,7 @@ namespace Disruptor3_Net.Sequencers
 
 
 
-    [StructLayout(LayoutKind.Explicit, Size = 136)]
+    [StructLayout(LayoutKind.Explicit, Size = 128)]
     public struct PaddedSingleSequence
     {
         [FieldOffset(0)]
@@ -32,11 +32,11 @@ namespace Disruptor3_Net.Sequencers
         [FieldOffset(48)]
         Int64 p7;
         [FieldOffset(56)]
-        Int64 p8;
-        [FieldOffset(64)]
         public Int64 nextValue;
-        [FieldOffset(72)]
+        [FieldOffset(64)]
         public Int64 cachedValue;
+        [FieldOffset(72)]
+        Int64 p09;
         [FieldOffset(80)]
         Int64 p10;
         [FieldOffset(88)]
@@ -49,10 +49,45 @@ namespace Disruptor3_Net.Sequencers
         Int64 p14;
         [FieldOffset(120)]
         Int64 p15;
-        [FieldOffset(128)]
-        Int64 p16;
     }
-   
+    //[StructLayout(LayoutKind.Explicit, Size = 128)]
+    //public struct PaddedSingleSequence
+    //{
+    //    [FieldOffset(0)]
+    //    Int64 p1;
+    //    [FieldOffset(8)]
+    //    Int64 p2;
+    //    [FieldOffset(16)]
+    //    Int64 p3;
+    //    [FieldOffset(24)]
+    //    Int64 p4;
+    //    [FieldOffset(32)]
+    //    Int64 p5;
+    //    [FieldOffset(40)]
+    //    Int64 p6;
+    //    [FieldOffset(48)]
+    //    Int64 p7;
+    //    [FieldOffset(56)]
+    //    Int64 p8;
+    //    [FieldOffset(64)]
+    //    public Int64 nextValue;
+    //    [FieldOffset(72)]
+    //    public Int64 cachedValue;
+    //    [FieldOffset(80)]
+    //    Int64 p10;
+    //    [FieldOffset(88)]
+    //    Int64 p11;
+    //    [FieldOffset(96)]
+    //    Int64 p12;
+    //    [FieldOffset(104)]
+    //    Int64 p13;
+    //    [FieldOffset(112)]
+    //    Int64 p14;
+    //    [FieldOffset(120)]
+    //    Int64 p15;
+        
+    //}
+
 
     /**
      * <p>Coordinator for claiming sequences for access to a data structure while tracking dependent {@link Sequence}s.
@@ -66,6 +101,7 @@ namespace Disruptor3_Net.Sequencers
     {
 
         PaddedSingleSequence padSequence = new PaddedSingleSequence();
+      
         /**
          * Construct a Sequencer with the selected wait strategy and buffer size.
          *
@@ -142,10 +178,10 @@ namespace Disruptor3_Net.Sequencers
                     {
                         Thread.Yield();
                     }
-                    else if (counter % 10001 == 0)
-                    {
-                        Thread.Sleep(1);
-                    }
+                    //else if (counter % 10001 == 0)
+                    //{
+                    //    Thread.Sleep(1);
+                    //}
                     //LockSupport.parkNanos(1L); // TODO: Use waitStrategy to spin?
                 }
                 padSequence.cachedValue = minSequence;

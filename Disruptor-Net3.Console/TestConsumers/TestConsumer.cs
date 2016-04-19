@@ -21,7 +21,7 @@ namespace Disruptor3_Net.Console
 
         public void onEvent(TestEvent eventToUse, long sequence, bool endOfBatch)
         {
-            tempValue = 1;
+           // tempValue = 1;
         }
     }
 }

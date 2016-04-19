@@ -60,7 +60,7 @@ namespace Disruptor3_Net.Util
          * returned.
          * @return the minimum sequence found or Long.MAX_VALUE if the array is empty.
          */
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        //[MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static long getMinimumSequence(Sequence[] sequences, Int64 minimum)
         {
 

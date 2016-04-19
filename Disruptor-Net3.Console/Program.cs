@@ -24,12 +24,13 @@ namespace Disruptor3_Net.Console
             System.Console.WriteLine("Press enter to start test");
             System.Console.ReadLine();
 
-            for(Int32 i = 0;i<4;i++)
+            for(Int32 i = 0;i<20;i++)
             {
                 //Test1P1CBatch();
                 //Test3P1CBatch();
-                //Test1P1C();
-                TestMulti3P1C();
+                Test1P1C();
+                //TestMulti3P1C();
+                System.Threading.Thread.Sleep(3000);
                
             }
 
@@ -351,43 +352,48 @@ namespace Disruptor3_Net.Console
         {
             System.Console.WriteLine("============================");
 
-           Int32 totalNumber = 1000000000;
+           Int32 totalNumber = 10000000;
             System.Console.WriteLine("Starting Test1P1C Test with " + String.Format("{0:###,###,###,###} entries", totalNumber) + " and a single thread");
          
          
             ManualResetEventSlim resetEvent = new ManualResetEventSlim(false);
         
-            Disruptor<TestEvent> disruptor = new dsl.Disruptor<TestEvent>(new TestEventFactory(), 1024,ProducerType.SINGLE, new WaitStrategies.BusySpinWaitStrategy());
+            Disruptor<TestEvent> disruptor = new dsl.Disruptor<TestEvent>(new TestEventFactory(), 2048,ProducerType.SINGLE, new WaitStrategies.BusySpinWaitStrategy());
             TestConsumer handler = new TestConsumer("TestSingleThreading");
             disruptor.handleEventsWith(handler);
             disruptor.start();
 
             RingBuffer<TestEvent> ringBuffer = disruptor.getRingBuffer();
-           
-            
-            Int64 currentCounter = 0;
-            System.Diagnostics.Stopwatch stopwatch = new Stopwatch();
-
           
-            stopwatch.Start();
-            while (currentCounter <totalNumber)
+            for(Int32 i = 1; i < 10;i++)
             {
-                long sequence = ringBuffer.next();
-                TestEvent tEvent = ringBuffer.get(sequence);
-                tEvent.value = 1;
-                ringBuffer.publish(sequence);
+                Int64 currentCounter = 0;
+                System.Diagnostics.Stopwatch stopwatch = new Stopwatch();
 
-                currentCounter++;
+
+                stopwatch.Start();
+                while (currentCounter < totalNumber)
+                {
+                    long sequence = ringBuffer.next(1);
+                    TestEvent tEvent = ringBuffer.get(sequence);
+                    tEvent.value = 1;
+                    ringBuffer.publish(sequence);
+
+                    currentCounter++;
+                }
+
+                while (ringBuffer.getCursor() != (totalNumber*i - 1))
+                {
+                    Thread.Sleep(1);
+                }
+                stopwatch.Stop();
+                System.Console.WriteLine("[TestSingleThreading] Consumer is done processing Events! Total Time in milliseconds:" + stopwatch.Elapsed.TotalMilliseconds + " " + String.Format("{0:###,###,###,###}op/sec", (totalNumber / stopwatch.Elapsed.TotalSeconds)));
+
             }
-            
-            while (ringBuffer.getCursor() != (totalNumber-1))
-            {
-                Thread.Sleep(1);
-            }
-            stopwatch.Stop();
-            System.Console.WriteLine("[TestSingleThreading] Consumer is done processing Events! Total Time in milliseconds:" + stopwatch.Elapsed.TotalMilliseconds + " " + String.Format("{0:###,###,###,###}op/sec", (totalNumber / stopwatch.Elapsed.TotalSeconds)));
-         
+
+
             disruptor.shutdown();
+            
             System.Console.WriteLine("============================");
  
 
