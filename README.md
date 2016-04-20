@@ -21,7 +21,7 @@ Single producer single consumer using batch.
 | 6134.8383 | 163,003,481     | 
 <br/>
 Single consumer, single producer, but not using batch. <br/>
-This tends to fluxuate a bit.<br/>
+This tends to fluxuate a bit.(believe I have that fixed in a performance branch I will be merging soon)<br/>
 <br/>
 1,000,000,000 entries<br/>
 
@@ -69,10 +69,8 @@ BufferBlockSpin 1P1C		15 million op/sec<br/>
 BufferBlockSpin 2P1C		15 million op/sec<br/>
 BufferBlockSpin 3P1C		13 million op/sec<br/>
 <br/>
-BufferBlock with link 1P1C	5.8 million op/sec<br/>
-BufferBlock with link 2P1C	6.1 million op/sec<br/>
-BufferBlock with link 3P1C	5.7 million op/sec<br/>
-<br/>
+ActionBlock 1P1C 30-50 milion op/sec<br/>
+(will get better numbers soon)
 <br/>
 Example usage.
 <br/>
