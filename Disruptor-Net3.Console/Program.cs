@@ -17,6 +17,9 @@ namespace Disruptor3_Net.Console
     {
         static void Main(string[] args)
         {
+
+            //*NOTE* be sure to run in 64bit mode/Release (turn off prefer 32bit)
+
             System.Diagnostics.Process.GetCurrentProcess().PriorityClass = ProcessPriorityClass.AboveNormal;
 
             Trace.Listeners.Add(new TextWriterTraceListener(System.Console.Out));

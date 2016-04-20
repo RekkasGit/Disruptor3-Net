@@ -11,18 +11,30 @@ namespace Disruptor3_Net
     {
         /** Set to -1 as sequence starting point */
         static long INITIAL_CURSOR_VALUE = -1L;
-        public static Int32 numberToPad = IntPtr.Size; // want to padd the gate sequence
+        public static Int32 gateSequencePadding = IntPtr.Size; // want to padd the gate sequence
+
+        static AbstractSequencer()
+        {
+            //if we are 32bit, need to pad by 16 for 16*4 for 64bytes
+            //if it was 8 bytes, or 64bit, 8*8 = 64bytes, so don't have to do anything.
+            if (gateSequencePadding == 4)
+            {
+                gateSequencePadding = 16;
+            }
+        }
+
         public AbstractSequencer(Int32 bufferSize,IWaitStrategy waitStrat)
         {
             this.bufferSize = bufferSize;
             this.waitStrategy = waitStrat;
+            
             
         }
 
         protected int bufferSize;
         protected IWaitStrategy waitStrategy;
         protected Sequence cursor = new Sequence(INITIAL_CURSOR_VALUE);
-        protected Sequence[] gatingSequences = new Sequence[(numberToPad*2)];
+        protected Sequence[] gatingSequences = new Sequence[(gateSequencePadding*2)];
 
         public abstract void claim(long sequence);
         public abstract bool isAvailable(long sequence);
@@ -37,9 +49,9 @@ namespace Disruptor3_Net
                 currentSequences = gatingSequences;
                 updatedSequences = new Sequence[currentSequences.Length + newGatingSequences.Length];
                 Array.Copy(currentSequences, 0, updatedSequences,0,currentSequences.Length);
-                Array.Copy(newGatingSequences, 0, updatedSequences,currentSequences.Length-numberToPad, newGatingSequences.Length);
+                Array.Copy(newGatingSequences, 0, updatedSequences,currentSequences.Length-gateSequencePadding, newGatingSequences.Length);
                 cursorSequence = this.getCursor();
-                int index = currentSequences.Length-numberToPad;
+                int index = currentSequences.Length-gateSequencePadding;
                 foreach (Sequence sequence in newGatingSequences)
                 {
                     sequence.set(cursorSequence);
@@ -68,7 +80,7 @@ namespace Disruptor3_Net
 
 
                 Int32 numberToremove = 0;
-                for (Int32 i = numberToPad; i < oldSequences.Length -numberToPad; i++)
+                for (Int32 i = gateSequencePadding; i < oldSequences.Length -gateSequencePadding; i++)
                 {
                     if (oldSequences[i].get() != sequence.get())
                     {
@@ -81,8 +93,8 @@ namespace Disruptor3_Net
                 }
 
                 newSequences = new Sequence[oldSize - numberToremove];
-                Int32 newCounter = numberToPad;
-                for (Int32 i = numberToPad; i < oldSequences.Length - numberToPad; i++)
+                Int32 newCounter = gateSequencePadding;
+                for (Int32 i = gateSequencePadding; i < oldSequences.Length - gateSequencePadding; i++)
                 {
                     if (oldSequences[i].get() != sequence.get())
                     {
@@ -101,7 +113,7 @@ namespace Disruptor3_Net
         }
         public long getMinimumSequence()
         {
-            return Util.Util.getMinimumSequence(gatingSequences, cursor.get());
+            return Util.Util.getMinimumGateSequence(gatingSequences, cursor.get());
         }
         public abstract long getHighestPublishedSequence(long nextSequence, long availableSequence);
         public long getCursor()

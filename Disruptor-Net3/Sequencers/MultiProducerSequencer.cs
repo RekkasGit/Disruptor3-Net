@@ -35,7 +35,7 @@ namespace Disruptor3_Net.Sequencers
         }
         public override long remainingCapacity()
         {
-            long consumed = Util.Util.getMinimumSequence(gatingSequences, cursor.get());
+            long consumed = Util.Util.getMinimumGateSequence(gatingSequences, cursor.get());
             long produced = cursor.get();
             return getBufferSize() - (produced - consumed);
         }
@@ -65,7 +65,7 @@ namespace Disruptor3_Net.Sequencers
                 
                 if (wrapPoint > cachedGatingSequence || cachedGatingSequence > current)
                 {
-                    long gatingSequence = Util.Util.getMinimumSequence(gatingSequences, current);
+                    long gatingSequence = Util.Util.getMinimumGateSequence(gatingSequences, current);
 
                     if (wrapPoint > gatingSequence)
                     {
@@ -141,7 +141,7 @@ namespace Disruptor3_Net.Sequencers
 
             if (wrapPoint > cachedGatingSequence || cachedGatingSequence > cursorValue)
             {
-                long minSequence = Util.Util.getMinimumSequence(gatingSequences, cursorValue);
+                long minSequence = Util.Util.getMinimumGateSequence(gatingSequences, cursorValue);
                 gatingSequenceCache.set(minSequence);
 
                 if (wrapPoint > minSequence)

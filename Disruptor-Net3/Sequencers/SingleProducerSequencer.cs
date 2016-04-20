@@ -129,7 +129,7 @@ namespace Disruptor3_Net.Sequencers
 
             if (wrapPoint > cachedGatingSequence || cachedGatingSequence > nextValue)
             {
-                long minSequence = Util.Util.getMinimumSequence(gatingSequences, nextValue);
+                long minSequence = Util.Util.getMinimumGateSequence(gatingSequences, nextValue);
                 padSequence.cachedValue = minSequence;
 
                 if (wrapPoint > minSequence)
@@ -171,7 +171,7 @@ namespace Disruptor3_Net.Sequencers
             {
                 long minSequence;
                 Int64 counter = 0;
-                while (wrapPoint > (minSequence = Util.Util.getMinimumSequence(gatingSequences, nextValue)))
+                while (wrapPoint > (minSequence = Util.Util.getMinimumGateSequence(gatingSequences, nextValue)))
                 {
                     counter++;
                     if (counter % 100 == 0)
@@ -229,7 +229,7 @@ namespace Disruptor3_Net.Sequencers
         {
             long nextValue = padSequence.nextValue;
 
-            long consumed = Util.Util.getMinimumSequence(gatingSequences, nextValue);
+            long consumed = Util.Util.getMinimumGateSequence(gatingSequences, nextValue);
             long produced = nextValue;
             return getBufferSize() - (produced - consumed);
         }

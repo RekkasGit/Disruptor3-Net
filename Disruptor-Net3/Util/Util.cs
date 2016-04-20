@@ -49,7 +49,7 @@ namespace Disruptor3_Net.Util
         */
         public static long getMinimumSequence(Sequence[] sequences)
         {
-            return getMinimumSequence(sequences, Int64.MaxValue);
+            return getMinimumGateSequence(sequences, Int64.MaxValue);
         }
 
         /**
@@ -61,11 +61,11 @@ namespace Disruptor3_Net.Util
          * @return the minimum sequence found or Long.MAX_VALUE if the array is empty.
          */
         //[MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static long getMinimumSequence(Sequence[] sequences, Int64 minimum)
+        public static long getMinimumGateSequence(Sequence[] sequences, Int64 minimum)
         {
 
-            Int32 maxLength = sequences.Length - AbstractSequencer.numberToPad;
-            for (int i = AbstractSequencer.numberToPad; i <maxLength && i < sequences.Length; i++)
+            Int32 maxLength = sequences.Length - AbstractSequencer.gateSequencePadding;
+            for (int i = AbstractSequencer.gateSequencePadding; i <maxLength && i < sequences.Length; i++)
             {
                 Int64 value = sequences[i].get();
                 if (value < minimum)
