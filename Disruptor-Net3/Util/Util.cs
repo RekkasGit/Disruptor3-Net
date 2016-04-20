@@ -64,10 +64,15 @@ namespace Disruptor3_Net.Util
         public static long getMinimumSequence(Sequence[] sequences, Int64 minimum)
         {
 
-            for (int i = 0; i < sequences.Length; i++)
+            Int32 maxLength = sequences.Length - AbstractSequencer.numberToPad;
+            for (int i = AbstractSequencer.numberToPad; i <maxLength && i < sequences.Length; i++)
             {
                 Int64 value = sequences[i].get();
-                minimum = Math.Min(minimum, value);
+                if (value < minimum)
+                {
+                    minimum = value;
+                }
+                //minimum = Math.Min(minimum, value);
             }
             return minimum;
         }
@@ -81,7 +86,7 @@ namespace Disruptor3_Net.Util
         public static Sequence[] getSequencesFor(params IEventProcessor[] processors)
         {
             Sequence[] sequences = new Sequence[processors.Length];
-            for (int i = 0; i < sequences.Length; i++)
+            for (int i = 0; i < sequences.Length && i < processors.Length; i++)
             {
                 sequences[i] = processors[i].getSequence();
             }

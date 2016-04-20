@@ -352,7 +352,7 @@ namespace Disruptor3_Net.Console
         {
             System.Console.WriteLine("============================");
 
-           Int32 totalNumber = 10000000;
+           Int32 totalNumber = 30000000;
             System.Console.WriteLine("Starting Test1P1C Test with " + String.Format("{0:###,###,###,###} entries", totalNumber) + " and a single thread");
          
          
@@ -365,7 +365,7 @@ namespace Disruptor3_Net.Console
 
             RingBuffer<TestEvent> ringBuffer = disruptor.getRingBuffer();
           
-            for(Int32 i = 1; i < 10;i++)
+            for(Int32 i = 1; i < 5;i++)
             {
                 Int64 currentCounter = 0;
                 System.Diagnostics.Stopwatch stopwatch = new Stopwatch();

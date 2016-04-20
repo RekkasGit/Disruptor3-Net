@@ -32,6 +32,8 @@ namespace Disruptor3_Net.WaitStrategies
             if (availableSequence < sequence)
             {
                 Monitor.Enter(_gate);
+
+                //try/catch is faster than try finally by a fair bit.
                 try
                 {
                     ++_numWaiters;
@@ -41,11 +43,15 @@ namespace Disruptor3_Net.WaitStrategies
                         Monitor.Wait(_gate);
                     }
                 }
-                finally
+                catch(Exception ex)
                 {
                     --_numWaiters;
                     Monitor.Exit(_gate);
+                    throw;
                 }
+                --_numWaiters;
+                Monitor.Exit(_gate);
+
             }
             while ((availableSequence = dependentSequence.get()) < sequence)
             {
