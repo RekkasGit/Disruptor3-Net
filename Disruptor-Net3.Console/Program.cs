@@ -29,9 +29,9 @@ namespace Disruptor3_Net.Console
 
             for(Int32 i = 0;i<20;i++)
             {
-                //Test1P1CBatch();
+                Test1P1CBatch();
                 //Test3P1CBatch();
-                Test1P1C();
+                //Test1P1C();
                 //TestMulti3P1C();
                 System.Threading.Thread.Sleep(3000);
                
