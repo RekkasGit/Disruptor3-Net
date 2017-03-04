@@ -4,7 +4,7 @@ Disruptor 3.3.8 converted over for .net usage.
 Was a big fan of the Java version, and tried to use the .net version. Unfortunatly I encountered issues where it could stall and looked like the project was abandoned.
 I took two days (over Christmas holidays 2015) and converted the then current version (3.3.8) over to .net. 
 
-This is an initial development state, though seems to work well. (it is currently used in production environments without problem)
+For stability, it seems to work well and it is currently used in production environments without problem. 
 
 Performance numbers (done on an i72600k at around 4ghz)
 <br/>
@@ -71,7 +71,6 @@ BufferBlockSpin 2P1C		15 million op/sec<br/>
 BufferBlockSpin 3P1C		13 million op/sec<br/>
 <br/>
 ActionBlock 1P1C 30-50 milion op/sec<br/>
-(will get better numbers soon)
 <br/>
 Example usage.
 <br/>
