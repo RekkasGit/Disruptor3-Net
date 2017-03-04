@@ -355,21 +355,22 @@ namespace Disruptor3_Net.Console
         {
             System.Console.WriteLine("============================");
 
-           Int32 totalNumber = 30000000;
+           Int32 totalNumber = 600000000;
             System.Console.WriteLine("Starting Test1P1C Test with " + String.Format("{0:###,###,###,###} entries", totalNumber) + " and a single thread");
          
          
             ManualResetEventSlim resetEvent = new ManualResetEventSlim(false);
         
-            Disruptor<TestEvent> disruptor = new dsl.Disruptor<TestEvent>(new TestEventFactory(), 2048,ProducerType.SINGLE, new WaitStrategies.BusySpinWaitStrategy());
-            TestConsumer handler = new TestConsumer("TestSingleThreading");
-            disruptor.handleEventsWith(handler);
-            disruptor.start();
-
-            RingBuffer<TestEvent> ringBuffer = disruptor.getRingBuffer();
+          
           
             for(Int32 i = 1; i < 5;i++)
             {
+                Disruptor<TestEvent> disruptor = new dsl.Disruptor<TestEvent>(new TestEventFactory(), 2048, ProducerType.SINGLE, new WaitStrategies.BusySpinWaitStrategy());
+                TestConsumer handler = new TestConsumer("TestSingleThreading");
+                disruptor.handleEventsWith(handler);
+                disruptor.start();
+
+                RingBuffer<TestEvent> ringBuffer = disruptor.getRingBuffer();
                 Int64 currentCounter = 0;
                 System.Diagnostics.Stopwatch stopwatch = new Stopwatch();
 
@@ -385,17 +386,19 @@ namespace Disruptor3_Net.Console
                     currentCounter++;
                 }
 
-                while (ringBuffer.getCursor() != (totalNumber*i - 1))
+                while (ringBuffer.getCursor() != (totalNumber - 1))
                 {
-                    Thread.Sleep(1);
+                    System.Console.WriteLine("CursorLocation:" + ringBuffer.getCursor());
+                    
+                    Thread.Sleep(1000);
                 }
                 stopwatch.Stop();
                 System.Console.WriteLine("[TestSingleThreading] Consumer is done processing Events! Total Time in milliseconds:" + stopwatch.Elapsed.TotalMilliseconds + " " + String.Format("{0:###,###,###,###}op/sec", (totalNumber / stopwatch.Elapsed.TotalSeconds)));
-
+                disruptor.shutdown();
             }
 
 
-            disruptor.shutdown();
+            
             
             System.Console.WriteLine("============================");
  
