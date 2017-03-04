@@ -21,18 +21,6 @@ Single producer single consumer using batch.
 | 6134.8383 | 163,003,481     | 
 <br/>
 Single consumer, single producer, but not using batch. <br/>
-This tends to fluxuate a bit.(believe I have that fixed in a performance branch I will be merging soon)<br/>
-<br/>
-1,000,000,000 entries<br/>
-
-| Time(ms)        | ops/sec           | 
-|:------------- |-------------:| 
-| 13833.3955      |72,288,832 | 
-| 10664.2537     | 93,771,213      | 
-|12565.4032	 |79,583,598     | 
-|10404.4818 | 96,112,427     | 
-
-Three producer, single consumer , using batch.<br/>
 <br/>
 600,000,000 entries<br/>
 
@@ -42,6 +30,19 @@ Three producer, single consumer , using batch.<br/>
 | 6463.5193    | 92,828,685      | 
 |6454.4628	 |92,958,937     | 
 |6434.5762 | 93,246,234    | 
+
+Three producer, single consumer , using batch.<br/>
+<br/>
+600,000,000 entries<br/>
+
+| Time(ms)        | ops/sec           | 
+|:------------- |-------------:| 
+| 7092.9208      |82,905,835 | 
+| 7092.9208    | 84,591,386      | 
+|7226.0525	 |83,032,887     | 
+|7072.2216 |  84,838,971     | 
+
+
 
 Three producer, single consumer , *NOT* using batch.<br/>
 <br/>
